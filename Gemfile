@@ -71,5 +71,7 @@ gem "tailwindcss-rails", "~> 3.3"
 
 gem "devise", "~> 4.9"
 
-gem 'simple_form-tailwind'
-gem 'simple_form'
+gem "simple_form-tailwind"
+gem "simple_form"
+
+gem "rubocop", "~> 1.71"

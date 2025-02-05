@@ -1,0 +1,8 @@
+{
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[ruby]": {
+		"editor.tabSize": 2,
+		"editor.useTabStops": false
+	}
+}

@@ -404,6 +404,7 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rails (~> 8.0.1)
+  rubocop (~> 1.71)
   rubocop-rails-omakase
   selenium-webdriver
   simple_form
