@@ -2,7 +2,7 @@ class MembersController < ApplicationController
   layout "admin"
 
   before_action :set_family
-  before_action :set_member, only: [:edit, :update, :destroy]
+  before_action :set_member, only: [ :edit, :update, :destroy ]
 
   def index
     @members = @family.members
@@ -34,7 +34,11 @@ class MembersController < ApplicationController
 
   def destroy
     @member.destroy
-    redirect_to family_members_path(@family), notice: "Member deleted successfully."
+
+    respond_to do |format|
+      format.html { head :no_content }
+      format.json { render json: { message: "member deleted successfully." }, status: :ok }
+    end
   end
 
   private

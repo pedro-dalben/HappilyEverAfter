@@ -1,7 +1,7 @@
 class GiftItemsController < ApplicationController
   layout "admin"
 
-  before_action :set_gift_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_gift_item, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @gift_items = GiftItem.all
@@ -36,7 +36,11 @@ class GiftItemsController < ApplicationController
 
   def destroy
     @gift_item.destroy
-    redirect_to gift_items_path, notice: "Gift item deleted successfully."
+
+    respond_to do |format|
+      format.html { head :no_content }
+      format.json { render json: { message: "Gift item deleted successfully." }, status: :ok }
+    end
   end
 
   private

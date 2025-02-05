@@ -3,7 +3,6 @@
     <h1 class="text-2xl font-bold text-gray-800">Families</h1>
     <%= link_to "Add Family", new_family_path, class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 shadow-md" %>
   </div>
-
   <table class="w-full overflow-hidden border border-collapse border-gray-300 rounded-lg">
     <thead class="bg-gray-200">
       <tr>
@@ -27,12 +26,13 @@
                 controller: "delete",
                 action: "click->delete#confirm",
                 delete_url_value: family_path(family),
-                turbo: "false"
+                turbo: "false",
+                turbo_method: "delete"
               },
               class: "bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 cursor-pointer"
             %>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>

@@ -1,7 +1,7 @@
 class FamiliesController < ApplicationController
   layout "admin"
 
-  before_action :set_family, only: [:show, :edit, :update, :destroy]
+  before_action :set_family, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @families = Family.all
@@ -36,7 +36,11 @@ class FamiliesController < ApplicationController
 
   def destroy
     @family.destroy
-    redirect_to families_path, notice: "Family deleted successfully."
+
+    respond_to do |format|
+      format.html { head :no_content }
+      format.json { render json: { message: "Family deleted successfully." }, status: :ok }
+    end
   end
 
   private
