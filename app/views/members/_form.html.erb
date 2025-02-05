@@ -1,0 +1,23 @@
+<div class="max-w-lg p-6 bg-white rounded shadow">
+  <%= simple_form_for [@family, @member] do |f| %>
+    <div class="mb-4">
+      <%= f.label :name, class: "block text-gray-700 font-medium mb-1" %>
+      <%= f.input :name, label: false, input_html: { class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" } %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :age, class: "block text-gray-700 font-medium mb-1" %>
+      <%= f.input :age, label: false, input_html: { type: "number", class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" } %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :gender, class: "block text-gray-700 font-medium mb-1" %>
+      <%= f.input :gender, label: false, collection: ["M", "F", "Other"], include_blank: "Select", input_html: { class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" } %>
+    </div>
+
+    <div class="flex space-x-2">
+      <%= f.button :submit, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+      <%= link_to "Cancel", family_members_path(@family), class: "bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" %>
+    </div>
+  <% end %>
+</div>

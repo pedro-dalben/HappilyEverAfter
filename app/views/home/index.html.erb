@@ -1,0 +1,22 @@
+<div class="py-10 text-center bg-white">
+  <h1 class="text-4xl font-bold text-gray-800">Welcome to Our Wedding Website</h1>
+  <p class="mt-4 text-lg text-gray-600">Please confirm your presence and explore our gift list!</p>
+
+  <div class="mt-6">
+    <a href="<%= families_path %>" class="px-4 py-2 text-white bg-blue-500 rounded shadow hover:bg-blue-600">
+      Confirm Presence
+    </a>
+    <a href="<%= gift_items_path %>" class="px-4 py-2 ml-4 text-white bg-green-500 rounded shadow hover:bg-green-600">
+      View Gift List
+    </a>
+  </div>
+</div>
+<div data-controller="hello">
+  <input type="text">
+  <button data-action="click->hello#greet">Greet a</button>
+</div>
+
+<div data-controller="hello">
+  <input type="text">
+  <button data-action="click->hello#greet">Greet</button>
+</div>

@@ -1,0 +1,32 @@
+<!-- app/views/gift_items/index.html.erb -->
+<div class="p-6 bg-white rounded shadow">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-2xl font-semibold text-gray-800">Gift Items</h1>
+    <%= link_to "Add New Gift", new_gift_item_path, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+  </div>
+
+  <table class="min-w-full border border-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-2 text-sm font-medium text-left text-gray-600">Name</th>
+        <th class="px-4 py-2 text-sm font-medium text-left text-gray-600">Price</th>
+        <th class="px-4 py-2 text-sm font-medium text-gray-600">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @gift_items.each do |item| %>
+        <tr>
+          <td class="px-4 py-2 text-sm text-gray-700"><%= item.name %></td>
+          <td class="px-4 py-2 text-sm text-gray-700">$<%= item.price %></td>
+          <td class="px-4 py-2 text-sm text-right">
+            <a href="<%= gift_item_path(item) %>" class="text-blue-600 hover:underline">Show</a>
+            |
+            <a href="<%= edit_gift_item_path(item) %>" class="text-yellow-600 hover:underline">Edit</a>
+            |
+            <%= link_to "Delete", gift_item_path(item), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600 hover:underline" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
