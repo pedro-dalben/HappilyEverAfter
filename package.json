@@ -12,6 +12,7 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.12",
+    "inputmask": "^5.0.9",
     "prettier": "^3.4.2",
     "sweetalert2": "^11.15.10"
   }
