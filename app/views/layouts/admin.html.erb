@@ -1,62 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  <title><%= content_for(:title) || "Hello App" %></title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="turbo-visit-control" content="reload">
-
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
-  <%= yield :head %>
-  <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-  <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-  <link rel="icon" href="/icon.png" type="image/png">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/icon.png">
-  <%# Includes all stylesheet files in app/assets/stylesheets %>
-  <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-  <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
-  <%= turbo_include_tags %>
-</head>
-
-<body class="min-h-screen bg-gray-100">
-
-  <div class="flex h-screen">
-    <!-- SIDEBAR -->
-    <aside class="flex flex-col w-64 bg-white border-r border-gray-200">
-      <div class="p-4 border-b border-gray-200">
-        <h1 class="text-2xl font-bold text-gray-800">
-          <a href="<%= root_path %>">MyWedding</a>
-        </h1>
+    <title><%= content_for?(:title) ? yield(:title) : "Admin Panel" %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="turbo-visit-control" content="reload">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <!-- Favicon and icons -->
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <!-- Stylesheets -->
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <!-- JavaScript -->
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <%= turbo_include_tags %>
+  </head>
+  <body class="min-h-screen bg-gray-100">
+    <div class="flex h-screen">
+      <% if user_signed_in? %>
+        <!-- SIDEBAR -->
+        <aside class="flex flex-col w-64 bg-white border-r border-gray-200">
+          <div class="p-4 border-b border-gray-200">
+            <h1 class="text-2xl font-bold text-gray-800">
+              <a href="<%= root_path %>">MyWedding</a>
+            </h1>
+          </div>
+          <nav class="flex-1 p-4 space-y-2">
+            <%= link_to "Dashboard", root_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
+            <%= link_to "Families", families_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
+            <%= link_to "Gift Items", gift_items_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
+            <!-- NEW USER LINK -->
+            <%= link_to "Create New User", new_admin_user_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
+          </nav>
+          <div class="p-4 border-t border-gray-200">
+            <div class="mb-2 text-sm text-gray-600">
+              Logged in as: <strong><%= current_user.email if user_signed_in? %></strong>
+            </div>
+            <%= link_to "Logout", destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo: "false" }, class: "block w-full text-center bg-red-500 text-white py-2 rounded hover:bg-red-600" %>
+          </div>
+        </aside>
+      <% end %>
+      <!-- MAIN CONTENT -->
+      <div class="flex flex-col flex-1">
+        <!-- FIXED HEADER -->
+        <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
+          <div class="text-xl font-semibold text-gray-800">Admin Panel</div>
+          <!-- Optional: User info or notifications -->
+          <% if user_signed_in? %>
+            <div class="text-sm text-gray-600">
+              Welcome, <%= current_user.email %>
+            </div>
+          <% end %>
+        </header>
+        <main class="p-6 overflow-y-auto">
+          <%= yield %>
+        </main>
       </div>
-      <nav class="flex-1 p-4 space-y-2">
-        <%= link_to "Dashboard", root_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
-        <%= link_to "Families", families_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
-        <%= link_to "Gift Items", gift_items_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
-        <!-- Adicione outros links conforme necessário -->
-      </nav>
-      <div class="p-4 border-t border-gray-200">
-        <!-- Opcional: Botão de Logout, etc. -->
-        <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "block w-full text-center bg-red-500 text-white py-2 rounded hover:bg-red-600" %>
-      </div>
-    </aside>
-
-    <!-- CONTEÚDO PRINCIPAL -->
-    <div class="flex flex-col flex-1">
-      <!-- HEADER FIXO -->
-      <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
-        <div class="text-xl font-semibold text-gray-800">Admin Panel</div>
-        <!-- Poderia incluir algo à direita (ex: usuário logado, notificações, etc.) -->
-      </header>
-
-      <!-- CONTEÚDO SCROLLÁVEL -->
-      <main class="p-6 overflow-y-auto">
-        <%= yield %>
-      </main>
     </div>
-  </div>
-
-</body>
+  </body>
 </html>

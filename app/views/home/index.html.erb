@@ -1,22 +1,127 @@
-<div class="py-10 text-center bg-white">
-  <h1 class="text-4xl font-bold text-gray-800">Welcome to Our Wedding Website</h1>
-  <p class="mt-4 text-lg text-gray-600">Please confirm your presence and explore our gift list!</p>
-
-  <div class="mt-6">
-    <a href="<%= families_path %>" class="px-4 py-2 text-white bg-blue-500 rounded shadow hover:bg-blue-600">
-      Confirm Presence
-    </a>
-    <a href="<%= gift_items_path %>" class="px-4 py-2 ml-4 text-white bg-green-500 rounded shadow hover:bg-green-600">
-      View Gift List
-    </a>
+<!-- HERO SECTION: White background, dynamic carousel images, top/bottom flowers -->
+<section class="relative h-screen overflow-hidden bg-white">
+  <!-- TOP FLOWERS, centered, pointer-events-none to avoid blocking clicks -->
+  <div class="absolute top-0 left-0 z-20 flex justify-center w-full pointer-events-none">
+    <%= image_tag "flores.png",
+      alt: "Flores superiores",
+      class: "w-full md:w-auto h-auto object-contain max-h-32 md:max-h-60" %>
   </div>
-</div>
-<div data-controller="hello">
-  <input type="text">
-  <button data-action="click->hello#greet">Greet a</button>
-</div>
+  <!-- Carousel Background (using images from app/assets/images/carrosel) -->
+  <div class="absolute inset-0 z-0">
+    <div class="relative h-full carousel">
+      <% @carousel_images.each_with_index do |image, i| %>
+        <!-- Each Slide -->
+        <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out carousel-item <%= i.zero? ? '' : 'opacity-0' %>">
+          <%= image_tag "carrosel/#{image}", alt: "Slide #{i+1}", class: "object-cover w-full h-full" %>
+        </div>
+      <% end %>
+    </div>
+    <!-- Dark overlay for contrast -->
+    <div class="absolute inset-0 z-10 bg-black opacity-50"></div>
+  </div>
+  <!-- Overlay Title Content (above overlay & flowers) -->
+  <div class="relative z-30 flex flex-col items-center justify-center h-full px-4 text-center"
+       data-aos="fade-up" data-aos-duration="1000">
+    <h1 class="text-5xl font-extrabold text-white md:text-7xl">Pedro &amp; Giovana</h1>
+    <p class="mt-4 text-xl text-gray-200 md:text-2xl">Um amor infinito, uma celebração única</p>
+  </div>
+  <!-- BOTTOM FLOWERS -->
+  <div class="absolute bottom-0 left-0 z-20 flex justify-center w-full pointer-events-none">
+    <%= image_tag "flores.png",
+      alt: "Flores inferiores",
+      class: "w-full md:w-auto h-auto object-contain max-h-32 md:max-h-60" %>
+  </div>
+</section>
+<!-- SOBRE NÓS SECTION (unchanged) -->
+<section class="py-16 bg-white" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
+  <div class="container px-4 mx-auto">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="mb-6 text-4xl font-bold" style="color: var(--primary);">Sobre Nós</h2>
+      <p class="mb-4 text-lg" style="color: var(--secondary);">
+        Pedro e Giovana se conheceram em uma noite encantadora, onde cada olhar revelou a magia de um destino traçado com carinho. Unidos por uma paixão verdadeira, eles trilham juntos um caminho repleto de sorrisos e desafios.
+      </p>
+      <p class="text-lg" style="color: var(--secondary);">
+        Convidamos você para fazer parte deste dia inesquecível, onde celebraremos o amor e a união de duas almas que se encontraram para transformar o ordinário em extraordinário.
+      </p>
+    </div>
+  </div>
+</section>
+<!-- MOMENTOS (CAROUSEL) SECTION (unchanged logic) -->
+<section class="py-16" data-aos="fade-up" data-aos-delay="400" data-aos-duration="800">
+  <div class="container px-4 mx-auto">
+    <div class="relative">
+      <div id="momentos-carousel" class="relative flex overflow-hidden rounded-lg">
+        <!-- Slide 1 -->
+        <div class="min-w-full transition-opacity duration-700 ease-in-out carousel-item">
+          <img src="https://picsum.photos/1200/600?random=11" alt="Momento 1" class="object-cover w-full h-auto rounded-lg">
+        </div>
+        <!-- Slide 2 -->
+        <div class="hidden min-w-full transition-opacity duration-700 ease-in-out carousel-item">
+          <img src="https://picsum.photos/1200/600?random=22" alt="Momento 2" class="object-cover w-full h-auto rounded-lg">
+        </div>
+        <!-- Slide 3 -->
+        <div class="hidden min-w-full transition-opacity duration-700 ease-in-out carousel-item">
+          <img src="https://picsum.photos/1200/600?random=33" alt="Momento 3" class="object-cover w-full h-auto rounded-lg">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- RSVP BUTTON SECTION (unchanged) -->
+<section class="py-16 bg-white" data-aos="fade-up" data-aos-delay="600" data-aos-duration="800">
+  <div class="container px-4 mx-auto text-center">
+    <button id="rsvp-button" class="px-10 py-4 font-semibold text-white transition duration-300 rounded-full shadow-xl bg-accent hover:bg-green-600">
+      Confirmar Presença
+    </button>
+  </div>
+</section>
+<!-- FOOTER (unchanged) -->
+<footer class="py-8 bg-gray-800">
+  <div class="container px-4 mx-auto text-center text-gray-300">
+    &copy; <script>
+      document.write(new Date().getFullYear());
+    </script> Pedro &amp; Giovana. Todos os direitos reservados.
+  </div>
+</footer>
+<!-- JS for Hero Carousel & "Momentos" Carousel -->
+<script>
+  // Hero Carousel
+  document.addEventListener('DOMContentLoaded', function() {
+    const heroItems = document.querySelectorAll('.carousel .carousel-item');
+    let currentHero = 0;
 
-<div data-controller="hello">
-  <input type="text">
-  <button data-action="click->hello#greet">Greet</button>
-</div>
+    function showHeroItem(index) {
+      heroItems.forEach((item, i) => {
+        item.style.opacity = (i === index) ? '1' : '0';
+      });
+    }
+
+    showHeroItem(currentHero);
+
+    setInterval(() => {
+      currentHero = (currentHero + 1) % heroItems.length;
+      showHeroItem(currentHero);
+    }, 5000);
+  });
+
+  // Momentos Carousel
+  document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.getElementById('momentos-carousel');
+    if (carousel) {
+      const items = carousel.querySelectorAll('.carousel-item');
+      let currentIndex = 0;
+
+      function showItem(index) {
+        items.forEach((item, i) => {
+          item.classList.toggle('hidden', i !== index);
+        });
+      }
+
+      showItem(currentIndex);
+      setInterval(() => {
+        currentIndex = (currentIndex + 1) % items.length;
+        showItem(currentIndex);
+      }, 4000);
+    }
+  });
+</script>

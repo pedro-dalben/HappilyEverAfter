@@ -1,0 +1,18 @@
+<h1>Create New User</h1>
+<%= form_with model: @user, url: admin_users_path, local: true do |f| %>
+  <div class="mb-4">
+    <%= f.label :email, class: "block text-gray-700 font-medium mb-1" %>
+    <%= f.email_field :email, class: "w-full border border-gray-300 rounded px-3 py-2" %>
+  </div>
+  <div class="mb-4">
+    <%= f.label :password, class: "block text-gray-700 font-medium mb-1" %>
+    <%= f.password_field :password, class: "w-full border border-gray-300 rounded px-3 py-2" %>
+  </div>
+  <div class="mb-4">
+    <%= f.label :password_confirmation, class: "block text-gray-700 font-medium mb-1" %>
+    <%= f.password_field :password_confirmation, class: "w-full border border-gray-300 rounded px-3 py-2" %>
+  </div>
+  <div>
+    <%= f.submit "Create User", class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+  </div>
+<% end %>

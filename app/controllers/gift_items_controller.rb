@@ -1,6 +1,4 @@
-class GiftItemsController < ApplicationController
-  layout "admin"
-
+class GiftItemsController < AdminController
   before_action :set_gift_item, only: [ :show, :edit, :update, :destroy ]
 
   def index

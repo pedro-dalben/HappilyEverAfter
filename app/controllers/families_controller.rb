@@ -1,6 +1,4 @@
-class FamiliesController < ApplicationController
-  layout "admin"
-
+class FamiliesController < AdminController
   before_action :set_family, only: [ :show, :edit, :update, :destroy ]
 
   def index
