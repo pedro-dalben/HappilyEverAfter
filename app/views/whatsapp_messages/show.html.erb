@@ -1,0 +1,19 @@
+<div class="max-w-3xl p-6 mx-auto bg-white rounded shadow">
+  <h1 class="mb-4 text-2xl font-bold">Detalhes da Mensagem</h1>
+  <p><strong>Mensagem:</strong> <%= @message.content %></p>
+  <p><strong>Status:</strong> <%= @message.status %></p>
+  <p><strong>Progresso:</strong> <%= @message.progress %></p>
+  <% if @message.image.attached? %>
+    <p><strong>Imagem:</strong></p>
+    <%= image_tag url_for(@message.image), class: "max-w-full h-auto" %>
+  <% end %>
+  <h2 class="mt-4 font-bold">Famílias:</h2>
+  <ul class="ml-6 list-disc">
+    <% @message.families.each do |family| %>
+      <li><%= "#{family.name} - #{family.phone}" %></li>
+    <% end %>
+  </ul>
+  <div class="mt-4">
+    <%= link_to "Voltar", whatsapp_messages_path, class: "inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" %>
+  </div>
+</div>

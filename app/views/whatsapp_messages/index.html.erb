@@ -1,0 +1,36 @@
+<div class="max-w-5xl p-6 mx-auto">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="mb-4 text-3xl font-bold">Envios de Mensagens</h1>
+    <%= link_to "Nova Mensagem", new_whatsapp_message_path, class: "bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" %>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase">Famílias</th>
+          <th class="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase">Mensagem</th>
+          <th class="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase">Status</th>
+          <th class="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase">Progresso</th>
+          <th class="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase">Data</th>
+          <th class="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase">Ações</th>
+        </tr>
+      </thead>
+      <tbody id="messages" class="bg-white divide-y divide-gray-200">
+        <% @messages.each do |msg| %>
+          <tr id="message-<%= msg.id %>">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= msg.families.map { |f| "#{f.name} - #{f.phone}" }.join(", ") %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap"><%= msg.content %></td>
+            <td class="px-6 py-4 whitespace-nowrap status"><%= msg.status %></td>
+            <td class="px-6 py-4 whitespace-nowrap progress"><%= msg.progress %></td>
+            <td class="px-6 py-4 whitespace-nowrap"><%= l(msg.created_at, format: :short) %></td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= link_to "Detalhes", whatsapp_message_path(msg), class: "text-blue-600 hover:underline" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

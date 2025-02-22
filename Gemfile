@@ -33,6 +33,8 @@ gem "jbuilder"           # JSON API builder
 gem "devise", "~> 4.9"   # Authentication
 gem "simple_form"        # Form builder
 gem "simple_form-tailwind" # SimpleForm with TailwindCSS
+gem "sidekiq"
+
 
 # Background processing & caching
 gem "solid_cache"
@@ -81,3 +83,8 @@ end
 
 # Timezone data for Windows and JRuby
 gem "tzinfo-data", platforms: %i[windows jruby]
+
+gem "httparty", "~> 0.22.0"
+gem "foreman", "~> 0.88.1"
+
+gem "faraday", "~> 2.12"

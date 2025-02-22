@@ -12,3 +12,6 @@ application.register("hello", HelloController)
 
 import MaskController from "./mask_controller"
 application.register("mask", MaskController)
+
+import SelectAllController from "./select_all_controller"
+application.register("select-all", SelectAllController)
