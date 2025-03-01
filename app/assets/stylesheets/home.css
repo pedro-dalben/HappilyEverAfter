@@ -1,0 +1,330 @@
+.swiper-progress-bar {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 4px;
+	background: rgba(255, 255, 255, 0.2);
+	z-index: 100;
+}
+
+.slide_progress-bar {
+	position: absolute;
+	height: 100%;
+	background: white;
+	width: 0;
+	opacity: 0;
+	transition: width 0.3s linear;
+}
+
+/* Ajustes para centralização e dimensionamento das imagens */
+.swiper-container {
+	width: 100%;
+	height: 100vh; /* Usa toda a altura da viewport */
+}
+
+.swiper-slide {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
+.swiper-slide img {
+	max-width: 90vw; /* Limita a largura a 90% da viewport */
+	max-height: 90vh; /* Limita a altura a 90% da viewport */
+	width: auto; /* Mantém a proporção */
+	height: auto; /* Mantém a proporção */
+	object-fit: contain; /* Garante que a imagem inteira seja visível */
+	margin: auto; /* Centralização adicional */
+}
+
+/* Ajuste da posição dos botões de navegação */
+.swiper-button-next,
+.swiper-button-prev {
+	color: white !important;
+	--swiper-navigation-size: 44px;
+	margin-top: 0; /* Remove margem padrão */
+	transform: translateY(-50%); /* Centraliza verticalmente */
+}
+
+.swiper-button-next {
+	right: 20px; /* Ajusta posição */
+}
+
+.swiper-button-prev {
+	left: 20px; /* Ajusta posição */
+}
+
+/* Ajuste da posição da paginação */
+.swiper-pagination {
+	bottom: 20px !important; /* Força posição da paginação */
+}
+
+.swiper-pagination-bullet {
+	background: white !important;
+	opacity: 0.5;
+}
+
+.swiper-pagination-bullet-active {
+	opacity: 1;
+}
+
+.swiper-progress-bar {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 4px;
+	background: rgba(255, 255, 255, 0.2);
+	z-index: 100;
+}
+
+.slide_progress-bar {
+	position: absolute;
+	height: 100%;
+	background: white;
+	width: 0;
+	opacity: 0;
+	transition: width 0.3s linear;
+}
+
+.autoplay-progress {
+	position: absolute;
+	right: 16px;
+	bottom: 16px;
+	z-index: 10;
+	width: 48px;
+	height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	color: white;
+}
+
+.autoplay-progress svg {
+	--progress: 0;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 10;
+	width: 100%;
+	height: 100%;
+	stroke-width: 4px;
+	stroke: white;
+	fill: none;
+	stroke-dashoffset: calc(125.6 * (1 - var(--progress)));
+	stroke-dasharray: 125.6;
+	transform: rotate(-90deg);
+}
+
+/* Estilização dos botões de navegação */
+.swiper-button-next,
+.swiper-button-prev {
+	color: white !important;
+	--swiper-navigation-size: 44px;
+	margin-top: 0; /* Remove margem padrão */
+	transform: translateY(-50%); /* Centraliza verticalmente */
+}
+
+.swiper-button-next {
+	right: 20px; /* Ajusta posição */
+}
+
+.swiper-button-prev {
+	left: 20px; /* Ajusta posição */
+}
+
+/* Estilização da paginação */
+.swiper-pagination-bullet {
+	background: white !important;
+	opacity: 0.5;
+}
+
+.swiper-pagination-bullet-active {
+	opacity: 1;
+}
+
+/* Ajustes do container do Swiper */
+.swiper-container {
+	width: 100%;
+	height: 100vh; /* Usa toda a altura da viewport */
+}
+
+.swiper-slide {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
+.swiper-slide img {
+	max-width: 90vw; /* Limita a largura a 90% da viewport */
+	max-height: 90vh; /* Limita a altura a 90% da viewport */
+	width: auto; /* Mantém a proporção */
+	height: auto; /* Mantém a proporção */
+	object-fit: contain; /* Garante que a imagem inteira seja visível */
+	margin: auto; /* Centralização adicional */
+}
+
+/* Ajuste da posição da paginação */
+.swiper-pagination {
+	bottom: 20px !important; /* Força posição da paginação */
+}
+
+.reveal-element {
+	opacity: 0;
+	transform: translateY(20px);
+	transition:
+		opacity 0.6s ease,
+		transform 0.6s ease;
+}
+
+.reveal-element.revealed {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+/* Preloader */
+@keyframes progress {
+	0% {
+		width: 0%;
+	}
+	100% {
+		width: 100%;
+	}
+}
+.animate-progress {
+	animation: progress 2s ease-in-out;
+}
+
+/* Mouse scroll */
+.mouse {
+	width: 26px;
+	height: 40px;
+	border: 2px solid white;
+	border-radius: 20px;
+	position: relative;
+	margin: 0 auto 8px;
+}
+.wheel {
+	width: 4px;
+	height: 8px;
+	background: white;
+	border-radius: 2px;
+	position: absolute;
+	top: 6px;
+	left: 50%;
+	transform: translateX(-50%);
+	animation: mouse-wheel 1.5s ease infinite;
+}
+@keyframes mouse-wheel {
+	0% {
+		top: 6px;
+		opacity: 1;
+	}
+	100% {
+		top: 18px;
+		opacity: 0;
+	}
+}
+
+/* Elementos flutuantes */
+.floating-element {
+	position: absolute;
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	background: radial-gradient(
+		circle,
+		rgba(255, 255, 255, 0.1) 0%,
+		rgba(255, 255, 255, 0) 70%
+	);
+	animation: float var(--duration, 6s) ease-in-out infinite;
+}
+@keyframes float {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-20px);
+	}
+}
+
+/* Partículas */
+.particles-container {
+	position: relative;
+	overflow: hidden;
+}
+.particle {
+	position: absolute;
+	width: var(--size, 5px);
+	height: var(--size, 5px);
+	background-color: rgba(115, 200, 169, 0.3);
+	border-radius: 50%;
+	left: var(--left, 50%);
+	bottom: -10px;
+	animation: rise 15s linear infinite;
+	animation-delay: var(--delay, 0s);
+}
+@keyframes rise {
+	0% {
+		transform: translateY(0) rotate(0);
+		opacity: 0;
+	}
+	10% {
+		opacity: 1;
+	}
+	90% {
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(-400px) rotate(360deg);
+		opacity: 0;
+	}
+}
+
+/* Animações de texto */
+.split-text {
+	opacity: 0;
+	animation: reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+.fade-up-elements > * {
+	opacity: 0;
+	transform: translateY(20px);
+	animation: fadeUp 1s ease forwards;
+	animation-delay: calc(var(--delay, 0) * 1ms);
+}
+@keyframes reveal {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+@keyframes fadeUp {
+	0% {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Parallax */
+.parallax {
+	transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.section-dot-background {
+	background-color: oklch(0.508 0.118 165.612);
+}
+
+.section-dot.active {
+	background-color: oklch(0.792 0.209 151.711);
+}

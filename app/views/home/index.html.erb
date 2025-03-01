@@ -1,127 +1,376 @@
-<!-- HERO SECTION: White background, dynamic carousel images, top/bottom flowers -->
-<section class="relative h-screen overflow-hidden bg-white">
-  <!-- TOP FLOWERS, centered, pointer-events-none to avoid blocking clicks -->
-  <div class="absolute top-0 left-0 z-20 flex justify-center w-full pointer-events-none">
-    <%= image_tag "flores.png",
-      alt: "Flores superiores",
-      class: "w-full md:w-auto h-auto object-contain max-h-32 md:max-h-60" %>
+<!-- HERO SECTION: Parallax effect com vídeo de fundo -->
+<section class="relative h-screen overflow-hidden bg-gradient-to-b from-[#FF8C42] to-[#2D3047]">
+  <!-- Background Image com Overlay -->
+  <div class="absolute inset-0 w-full h-full">
+    <%= image_tag "paisagem.jpg", class: "object-cover w-full h-full opacity-90" %>
+    <!-- Gradiente overlay inspirado no pôr do sol -->
+    <%# <div class="absolute inset-0 bg-gradient-to-br from-[#ffb2479c] via-[#ffcc3346] to-[#ff10288f]"></div> %>
+    <%# <div class="absolute inset-0 bg-gradient-to-b from-[#F8C8DC] via-[#c38cd683] to-[#3C1361]"></div> %>
+    <%# <div class="absolute inset-0 bg-gradient-to-br from-[#FF8C42] via-[#ff6f5941] to-[#FFD27F]"></div> %>
+    <div class="absolute inset-0 bg-gradient-to-br from-[#73C8A9] via-[#fd9f8536] to-[#F6D285]"></div>
   </div>
-  <!-- Carousel Background (using images from app/assets/images/carrosel) -->
-  <div class="absolute inset-0 z-0">
-    <div class="relative h-full carousel">
-      <% @carousel_images.each_with_index do |image, i| %>
-        <!-- Each Slide -->
-        <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out carousel-item <%= i.zero? ? '' : 'opacity-0' %>">
-          <%= image_tag "carrosel/#{image}", alt: "Slide #{i+1}", class: "object-cover w-full h-full" %>
-        </div>
-      <% end %>
+  <!-- Conteúdo Principal -->
+  <div class="relative z-10 flex flex-col items-center justify-center h-full">
+    <div class="text-center" data-aos="fade-up" data-aos-duration="1500">
+      <h1 class="font-serif text-6xl font-light text-white md:text-8xl drop-shadow-lg">
+        Pedro & Giovana
+      </h1>
+      <p class="mt-6 text-xl font-light tracking-wider text-white drop-shadow-lg">
+        <span class="block" data-aos="fade-up" data-aos-delay="200">UM AMOR INFINITO</span>
+        <span class="block mt-2" data-aos="fade-up" data-aos-delay="400">UMA CELEBRAÇÃO ÚNICA</span>
+      </p>
     </div>
-    <!-- Dark overlay for contrast -->
-    <div class="absolute inset-0 z-10 bg-black opacity-50"></div>
-  </div>
-  <!-- Overlay Title Content (above overlay & flowers) -->
-  <div class="relative z-30 flex flex-col items-center justify-center h-full px-4 text-center"
-       data-aos="fade-up" data-aos-duration="1000">
-    <h1 class="text-5xl font-extrabold text-white md:text-7xl">Pedro &amp; Giovana</h1>
-    <p class="mt-4 text-xl text-gray-200 md:text-2xl">Um amor infinito, uma celebração única</p>
-  </div>
-  <!-- BOTTOM FLOWERS -->
-  <div class="absolute bottom-0 left-0 z-20 flex justify-center w-full pointer-events-none">
-    <%= image_tag "flores.png",
-      alt: "Flores inferiores",
-      class: "w-full md:w-auto h-auto object-contain max-h-32 md:max-h-60" %>
-  </div>
-</section>
-<!-- SOBRE NÓS SECTION (unchanged) -->
-<section class="py-16 bg-white" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
-  <div class="container px-4 mx-auto">
-    <div class="max-w-3xl mx-auto text-center">
-      <h2 class="mb-6 text-4xl font-bold" style="color: var(--primary);">Sobre Nós</h2>
-      <p class="mb-4 text-lg" style="color: var(--secondary);">
-        Pedro e Giovana se conheceram em uma noite encantadora, onde cada olhar revelou a magia de um destino traçado com carinho. Unidos por uma paixão verdadeira, eles trilham juntos um caminho repleto de sorrisos e desafios.
-      </p>
-      <p class="text-lg" style="color: var(--secondary);">
-        Convidamos você para fazer parte deste dia inesquecível, onde celebraremos o amor e a união de duas almas que se encontraram para transformar o ordinário em extraordinário.
-      </p>
+    <!-- Scroll Indicator -->
+    <div class="absolute transform -translate-x-1/2 bottom-10 left-1/2 animate-bounce">
+      <svg class="w-6 h-6 text-white drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+      </svg>
     </div>
   </div>
 </section>
-<!-- MOMENTOS (CAROUSEL) SECTION (unchanged logic) -->
-<section class="py-16" data-aos="fade-up" data-aos-delay="400" data-aos-duration="800">
+<!-- SOBRE NÓS SECTION -->
+<section class="py-20 bg-white" data-aos="fade-up">
   <div class="container px-4 mx-auto">
-    <div class="relative">
-      <div id="momentos-carousel" class="relative flex overflow-hidden rounded-lg">
-        <!-- Slide 1 -->
-        <div class="min-w-full transition-opacity duration-700 ease-in-out carousel-item">
-          <img src="https://picsum.photos/1200/600?random=11" alt="Momento 1" class="object-cover w-full h-auto rounded-lg">
-        </div>
-        <!-- Slide 2 -->
-        <div class="hidden min-w-full transition-opacity duration-700 ease-in-out carousel-item">
-          <img src="https://picsum.photos/1200/600?random=22" alt="Momento 2" class="object-cover w-full h-auto rounded-lg">
-        </div>
-        <!-- Slide 3 -->
-        <div class="hidden min-w-full transition-opacity duration-700 ease-in-out carousel-item">
-          <img src="https://picsum.photos/1200/600?random=33" alt="Momento 3" class="object-cover w-full h-auto rounded-lg">
+    <div class="grid items-center max-w-6xl gap-16 mx-auto md:grid-cols-2">
+      <div class="space-y-6">
+        <h2 class="font-serif text-4xl" style="color: var(--primary);">Nossa História</h2>
+        <p class="text-lg leading-relaxed text-gray-700">
+          Pedro e Giovana se conheceram em uma noite encantadora, onde cada olhar revelou a magia de um destino traçado com carinho.
+        </p>
+        <p class="text-lg leading-relaxed text-gray-700">
+          Unidos por uma paixão verdadeira, eles trilham juntos um caminho repleto de sorrisos e desafios.
+        </p>
+      </div>
+      <div class="relative h-[600px] group">
+        <div class="absolute inset-0 transition-transform duration-500 transform hover:scale-95">
+          <%= image_tag "aliancas.jpg", class: "object-cover w-full h-full rounded-lg shadow-2xl" %>
         </div>
       </div>
     </div>
   </div>
 </section>
-<!-- RSVP BUTTON SECTION (unchanged) -->
-<section class="py-16 bg-white" data-aos="fade-up" data-aos-delay="600" data-aos-duration="800">
-  <div class="container px-4 mx-auto text-center">
-    <button id="rsvp-button" class="px-10 py-4 font-semibold text-white transition duration-300 rounded-full shadow-xl bg-accent hover:bg-green-600">
-      Confirmar Presença
-    </button>
+<!-- GALERIA DE MOMENTOS -->
+<section class="py-24 bg-gray-50">
+  <div class="container px-4 mx-auto">
+    <h2 class="mb-16 font-serif text-4xl text-center" style="color: var(--primary);">Nossos Momentos</h2>
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      <% @carousel_images.each_with_index do |image, i| %>
+        <div class="relative overflow-hidden cursor-pointer group"
+             data-aos="fade-up"
+             data-aos-delay="<%= i * 100 %>"
+             onclick="openModal(<%= i %>)">
+          <%= image_tag "carrosel/#{image}",
+              alt: "Slide #{i+1}",
+              class: "object-cover w-full transition-transform duration-700 transform aspect-square hover:scale-110" %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </section>
-<!-- FOOTER (unchanged) -->
-<footer class="py-8 bg-gray-800">
-  <div class="container px-4 mx-auto text-center text-gray-300">
-    &copy; <script>
-      document.write(new Date().getFullYear());
-    </script> Pedro &amp; Giovana. Todos os direitos reservados.
+<!-- Modal do Carrossel -->
+<div id="galleryModal" class="fixed inset-0 z-50 hidden bg-black/90">
+  <!-- Botão de Fechar -->
+  <button onclick="closeModal()" class="absolute z-50 p-2 text-white transition-colors hover:text-gray-300 right-4 top-4">
+    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+    </svg>
+  </button>
+  <!-- Carrossel -->
+  <div class="h-full swiper-container">
+    <div class="swiper-wrapper">
+      <% @carousel_images.each do |image| %>
+        <div class="flex items-center justify-center swiper-slide">
+          <div class="relative flex items-center justify-center w-full h-full p-4">
+            <%= image_tag "carrosel/#{image}",
+                class: "max-w-full max-h-full h-auto w-auto object-contain" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <!-- Navegação -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <!-- Paginação -->
+    <div class="swiper-pagination"></div>
   </div>
+</div>
+<style>
+  .swiper-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    z-index: 100;
+  }
+
+  .slide_progress-bar {
+    position: absolute;
+    height: 100%;
+    background: white;
+    width: 0;
+    opacity: 0;
+    transition: width 0.3s linear;
+  }
+
+  .autoplay-progress {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+  }
+
+  .autoplay-progress svg {
+    --progress: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    stroke-width: 4px;
+    stroke: white;
+    fill: none;
+    stroke-dashoffset: calc(125.6 * (1 - var(--progress)));
+    stroke-dasharray: 125.6;
+    transform: rotate(-90deg);
+  }
+
+  /* Estilização dos botões de navegação */
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: white !important;
+    --swiper-navigation-size: 44px;
+    margin-top: 0;      /* Remove margem padrão */
+    transform: translateY(-50%); /* Centraliza verticalmente */
+  }
+
+  .swiper-button-next {
+    right: 20px;        /* Ajusta posição */
+  }
+
+  .swiper-button-prev {
+    left: 20px;         /* Ajusta posição */
+  }
+
+  /* Estilização da paginação */
+  .swiper-pagination-bullet {
+    background: white !important;
+    opacity: 0.5;
+  }
+
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+  }
+
+  /* Ajustes do container do Swiper */
+  .swiper-container {
+    width: 100%;
+    height: 100vh; /* Usa toda a altura da viewport */
+  }
+
+  .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .swiper-slide img {
+    max-width: 90vw;    /* Limita a largura a 90% da viewport */
+    max-height: 90vh;   /* Limita a altura a 90% da viewport */
+    width: auto;        /* Mantém a proporção */
+    height: auto;       /* Mantém a proporção */
+    object-fit: contain;/* Garante que a imagem inteira seja visível */
+    margin: auto;       /* Centralização adicional */
+  }
+
+  /* Ajuste da posição da paginação */
+  .swiper-pagination {
+    bottom: 20px !important; /* Força posição da paginação */
+  }
+</style>
+<!-- Divisor simples antes do RSVP -->
+<div class="h-24 bg-gradient-to-b from-gray-50 to-[#73C8A9]/20"></div>
+<!-- RSVP SECTION -->
+<section class="relative py-32 bg-[#73C8A9]/20">
+  <div class="container relative px-4 mx-auto text-center">
+    <div class="max-w-2xl mx-auto" data-aos="fade-up">
+      <h2 class="mb-8 font-serif text-5xl text-[#2D3047] drop-shadow-sm">
+        Confirme Sua Presença
+      </h2>
+      <p class="mb-10 text-lg text-[#2D3047]/80">
+        Sua presença é fundamental para tornar este momento ainda mais especial
+      </p>
+      <button id="rsvp-button"
+              class="px-12 py-4 text-lg font-light tracking-wider transition-all duration-300 border-2 text-[#2D3047] border-[#2D3047] hover:bg-[#2D3047] hover:text-white">
+        RSVP
+      </button>
+      <!-- Data decorativa -->
+      <div class="mt-16 space-y-2 text-[#2D3047]/80">
+        <p class="text-xl font-light">3 de Maio de 2025</p>
+        <div class="w-16 h-[1px] mx-auto bg-[#2D3047]/30"></div>
+        <p class="font-light">11:00</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- FOOTER -->
+<footer class="py-8 text-center bg-black text-white/80">
+  <p class="text-sm tracking-wider">
+    © <%= Time.current.year %> Pedro & Giovana
+  </p>
 </footer>
-<!-- JS for Hero Carousel & "Momentos" Carousel -->
 <script>
-  // Hero Carousel
   document.addEventListener('DOMContentLoaded', function() {
-    const heroItems = document.querySelectorAll('.carousel .carousel-item');
-    let currentHero = 0;
-
-    function showHeroItem(index) {
-      heroItems.forEach((item, i) => {
-        item.style.opacity = (i === index) ? '1' : '0';
+    // Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
       });
-    }
+    });
 
-    showHeroItem(currentHero);
+    // Parallax Effect
+    window.addEventListener('scroll', function() {
+      const parallax = document.querySelectorAll('.parallax');
+      let scrollPosition = window.pageYOffset;
 
-    setInterval(() => {
-      currentHero = (currentHero + 1) % heroItems.length;
-      showHeroItem(currentHero);
-    }, 5000);
+      parallax.forEach(element => {
+        let speed = element.dataset.speed || 0.5;
+        element.style.transform = `translateY(${scrollPosition * speed}px)`;
+      });
+    });
   });
 
-  // Momentos Carousel
-  document.addEventListener('DOMContentLoaded', function() {
-    const carousel = document.getElementById('momentos-carousel');
-    if (carousel) {
-      const items = carousel.querySelectorAll('.carousel-item');
-      let currentIndex = 0;
+  let swiper;
+  const AUTOPLAY_DELAY = 5000; // 5 segundos
 
-      function showItem(index) {
-        items.forEach((item, i) => {
-          item.classList.toggle('hidden', i !== index);
-        });
-      }
+  function openModal(initialSlide) {
+    const modal = document.getElementById('galleryModal');
+    modal.classList.remove('hidden');
 
-      showItem(currentIndex);
-      setInterval(() => {
-        currentIndex = (currentIndex + 1) % items.length;
-        showItem(currentIndex);
-      }, 4000);
+    if (!swiper) {
+      swiper = new Swiper('.swiper-container', {
+        initialSlide: initialSlide,
+        grabCursor: true,
+        spaceBetween: 30,
+        loop: true,
+
+        // Autoplay
+        autoplay: {
+          delay: AUTOPLAY_DELAY,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true
+        },
+
+        // Efeito de fade
+        effect: 'fade',
+        fadeEffect: {
+          crossFade: true
+        },
+
+        // Navegação
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+
+        // Paginação
+        pagination: {
+          el: '.swiper-pagination',
+          type: 'bullets',
+          clickable: true
+        },
+
+        // Teclado e Mouse
+        keyboard: {
+          enabled: true,
+          onlyInViewport: false,
+        },
+        mousewheel: {
+          invert: false,
+        },
+
+        // Responsivo
+        breakpoints: {
+          640: {
+            slidesPerView: 1,
+          },
+          768: {
+            slidesPerView: 1,
+          },
+          1024: {
+            slidesPerView: 1,
+          },
+        },
+
+        on: {
+          autoplayTimeLeft(s, time, progress) {
+            const progressBar = document.querySelector('.slide_progress-bar');
+            if (progressBar) {
+              progressBar.style.width = `${(1 - progress) * 100}%`;
+              progressBar.style.opacity = 1;
+            }
+          },
+
+          slideChange: function () {
+            const progressBar = document.querySelector('.slide_progress-bar');
+            if (progressBar) {
+              progressBar.style.width = '0%';
+              progressBar.style.opacity = 0;
+            }
+          }
+        }
+      });
+    } else {
+      swiper.slideTo(initialSlide, 0);
+      swiper.autoplay.start();
     }
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('galleryModal');
+    modal.classList.add('hidden');
+    if (swiper) {
+      swiper.autoplay.stop();
+    }
+  }
+
+  // Fecha o modal com a tecla ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+
+  // Fecha o modal clicando fora da imagem
+  document.getElementById('galleryModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeModal();
+    }
+  });
+
+  // Pausa o autoplay quando o mouse está sobre a imagem
+  document.querySelector('.swiper-container')?.addEventListener('mouseenter', () => {
+    swiper?.autoplay.stop();
+  });
+
+  // Retoma o autoplay quando o mouse sai da imagem
+  document.querySelector('.swiper-container')?.addEventListener('mouseleave', () => {
+    swiper?.autoplay.start();
   });
 </script>
+<!-- Primeiro, adicione estes links no HEAD do seu layout ou no topo desta view -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
