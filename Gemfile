@@ -24,7 +24,7 @@ gem "stimulus-rails"     # Stimulus (Hotwire)
 
 # Tailwind CSS integration
 gem "tailwindcss-ruby", "~> 4.0"
-gem "tailwindcss-rails", "~> 4.1"
+gem "tailwindcss-rails", "~> 4.2"
 
 # --------------------------------------------
 # 🛠 Utilities & APIs
