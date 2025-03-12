@@ -3,7 +3,7 @@ source "https://rubygems.org"
 # --------------------------------------------
 # 📦 Rails & Core Gems
 # --------------------------------------------
-gem "rails", "~> 8.0.1"
+gem "rails", "~> 8.0.2"
 
 # Asset pipeline for Rails
 gem "propshaft"
