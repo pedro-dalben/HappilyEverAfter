@@ -88,3 +88,6 @@ gem "httparty", "~> 0.22.0"
 gem "foreman", "~> 0.88.1"
 
 gem "faraday", "~> 2.12"
+
+gem "prawn"
+gem "prawn-table"

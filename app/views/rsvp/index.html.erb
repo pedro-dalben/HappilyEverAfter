@@ -1,0 +1,34 @@
+<div class="min-h-screen flex items-center justify-center bg-[#73C8A9]/20 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-serif text-[#2D3047]">
+        Confirme sua presença
+      </h2>
+      <p class="mt-2 text-sm text-center text-gray-600">
+        Digite o código de confirmação que você recebeu no convite
+      </p>
+    </div>
+    <% if flash[:error] %>
+      <div class="relative px-4 py-3 text-red-700 bg-red-100 border border-red-400 rounded" role="alert">
+        <span class="block sm:inline"><%= flash[:error] %></span>
+      </div>
+    <% end %>
+    <%= form_with url: rsvp_validate_token_path, method: :post, class: "mt-8 space-y-6" do |f| %>
+      <div>
+        <%= f.label :token, "Código de confirmação", class: "sr-only" %>
+        <%= f.text_field :token, class: "appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#73C8A9] focus:border-[#73C8A9] focus:z-10 sm:text-sm", placeholder: "Digite seu código (ex: PG-ABCDEF)" %>
+      </div>
+      <div>
+        <%= f.submit "Próximo", class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#2D3047] hover:bg-[#2D3047]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#73C8A9]" %>
+      </div>
+    <% end %>
+    <div class="mt-6 text-center">
+      <p class="text-sm text-gray-600">
+        Não tem um código? Entre em contato pelo
+        <a href="https://wa.me/5512996742041" class="font-medium text-[#73C8A9] hover:text-[#73C8A9]/80">
+          WhatsApp
+        </a>
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-class MembersController < ApplicationController
+class MembersController < AdminController
   layout "admin"
 
   before_action :set_family

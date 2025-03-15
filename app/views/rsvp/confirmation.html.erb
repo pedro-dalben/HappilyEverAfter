@@ -1,0 +1,45 @@
+<div class="min-h-screen flex items-center justify-center bg-[#73C8A9]/20 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div>
+      <div class="flex justify-center">
+        <svg class="w-16 h-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h2 class="mt-6 text-center text-3xl font-serif text-[#2D3047]">
+        Presença confirmada!
+      </h2>
+      <p class="mt-2 text-sm text-center text-gray-600">
+        Obrigado por confirmar sua presença, <%= @family.name %>
+      </p>
+    </div>
+    <div class="mt-8">
+      <% if @confirmed_members.any? %>
+        <h3 class="text-lg font-medium text-gray-900">Confirmados:</h3>
+        <ul class="pl-5 mt-2 text-sm text-gray-600 list-disc">
+          <% @confirmed_members.each do |member| %>
+            <li><%= member.name %></li>
+          <% end %>
+        </ul>
+      <% end %>
+      <% if @unconfirmed_members.any? %>
+        <h3 class="mt-4 text-lg font-medium text-gray-900">Não comparecerão:</h3>
+        <ul class="pl-5 mt-2 text-sm text-gray-600 list-disc">
+          <% @unconfirmed_members.each do |member| %>
+            <li><%= member.name %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+    <div class="mt-8 text-center">
+      <p class="text-sm text-gray-600">
+        Você pode alterar sua confirmação a qualquer momento até a data: 10/04/2025
+      </p>
+      <p class="mt-2">
+        <a href="<%= root_path %>" class="font-medium text-[#73C8A9] hover:text-[#73C8A9]/80">
+          Voltar ao início
+        </a>
+      </p>
+    </div>
+  </div>
+</div>

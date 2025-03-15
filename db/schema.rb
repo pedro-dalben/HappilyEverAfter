@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_15_152530) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_01_205913) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -48,6 +48,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_15_152530) do
     t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "confirmed", default: false
   end
 
   create_table "families_whatsapp_messages", id: false, force: :cascade do |t|
@@ -72,6 +73,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_15_152530) do
     t.bigint "family_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "confirmed", default: false
     t.index ["family_id"], name: "index_members_on_family_id"
   end
 

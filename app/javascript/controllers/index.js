@@ -15,3 +15,6 @@ application.register("mask", MaskController)
 
 import SelectAllController from "./select_all_controller"
 application.register("select-all", SelectAllController)
+
+import SweetAlertController from "./sweet_alert_controller"
+application.register("sweet-alert", SweetAlertController)

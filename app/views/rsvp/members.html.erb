@@ -1,0 +1,66 @@
+<div class="min-h-screen flex items-center justify-center bg-[#73C8A9]/20 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-serif text-[#2D3047]">
+        Olá, <%= @family.name %>!
+      </h2>
+      <p class="mt-2 text-sm text-center text-gray-600">
+        Selecione os membros da família que irão comparecer
+      </p>
+    </div>
+    <% if flash[:alert] %>
+      <div class="relative px-4 py-3 text-red-700 bg-red-100 border border-red-400 rounded" role="alert">
+        <span class="block sm:inline"><%= flash[:alert] %></span>
+      </div>
+    <% end %>
+    <div id="sweet-alert-container"
+         data-controller="sweet-alert"
+         data-sweet-alert-title-value="Confirmar presença"
+         data-sweet-alert-icon-value="question">
+      <%= form_with url: rsvp_confirm_path,
+                    method: :post,
+                    class: "mt-8 space-y-6",
+                    data: { sweet_alert_target: "form" } do |f| %>
+        <div class="space-y-4">
+          <% @members.each do |member| %>
+            <div class="flex items-center">
+              <%= check_box_tag 'member_ids[]',
+                              member.id,
+                              member.confirmed,
+                              class: "h-4 w-4 text-[#73C8A9] focus:ring-[#73C8A9] border-gray-300 rounded" %>
+              <label for="member_ids_<%= member.id %>" class="block ml-3 text-sm font-medium text-gray-700">
+                <%= member.name %>
+              </label>
+            </div>
+          <% end %>
+        </div>
+        <div>
+          <%= f.submit "Confirmar presença",
+                      class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#2D3047] hover:bg-[#2D3047]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#73C8A9]" %>
+        </div>
+      <% end %>
+    </div>
+    <div class="mt-6 text-center">
+      <p class="text-sm text-gray-600">
+        <a href="<%= rsvp_path %>" class="font-medium text-[#73C8A9] hover:text-[#73C8A9]/80">
+          Voltar
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+<style>
+  .sweet-alert-custom {
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .sweet-alert-popup {
+    padding: 2rem;
+    border-radius: 1rem;
+  }
+
+  .sweet-alert-content {
+    text-align: left;
+    line-height: 1.75;
+  }
+</style>

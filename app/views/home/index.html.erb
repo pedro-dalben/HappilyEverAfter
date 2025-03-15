@@ -210,10 +210,27 @@
       <p class="mb-10 text-lg text-[#2D3047]/80">
         Sua presença é fundamental para tornar este momento ainda mais especial
       </p>
-      <button id="rsvp-button"
-              class="px-12 py-4 text-lg font-light tracking-wider transition-all duration-300 border-2 text-[#2D3047] border-[#2D3047] hover:bg-[#2D3047] hover:text-white">
-        RSVP
-      </button>
+      <%= link_to rsvp_path,
+                  class: "relative
+                          inline-flex
+                          items-center
+                          justify-center
+                          px-8
+                          py-4
+                          text-lg
+                          font-light
+                          tracking-wider
+                          text-white
+                          transition-all
+                          duration-300
+                          border-2
+                          border-white
+                          hover:bg-[#35799F]
+                          group
+                          bg-[#3c8bb4]",
+                  data: { turbo_frame: "rsvp_modal" } do %>
+        <span class="relative z-10">Confirme sua presença</span>
+      <% end %>
       <!-- Data decorativa -->
       <div class="mt-16 space-y-2 text-[#2D3047]/80">
         <p class="text-xl font-light">3 de Maio de 2025</p>
