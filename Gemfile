@@ -3,7 +3,7 @@ source "https://rubygems.org"
 # --------------------------------------------
 # 📦 Rails & Core Gems
 # --------------------------------------------
-gem "rails", "~> 8.0.1"
+gem "rails", "~> 8.0.2"
 
 # Asset pipeline for Rails
 gem "propshaft"
@@ -64,7 +64,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # General Ruby linter
-  gem "rubocop", "~> 1.73"
+  gem "rubocop", "~> 1.74"
 end
 
 group :development do
