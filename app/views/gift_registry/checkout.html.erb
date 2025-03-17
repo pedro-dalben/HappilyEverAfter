@@ -1,0 +1,94 @@
+<div class="min-h-screen bg-[#73C8A9]/20 pt-16 pb-24">
+  <div class="container max-w-6xl px-4 mx-auto">
+    <h1 class="text-3xl font-serif text-[#2D3047] mb-10">Finalizar Compra</h1>
+    <% if @cart_items.empty? %>
+      <div class="p-8 text-center bg-white rounded-lg shadow-lg">
+        <p class="mb-6 text-gray-600">Seu carrinho está vazio. Não é possível finalizar a compra.</p>
+        <a href="<%= gift_registry_path %>" class="inline-block py-2 px-6 bg-[#73C8A9] text-white rounded-md hover:bg-[#73C8A9]/90 transition-colors">
+          Ver Lista de Presentes
+        </a>
+      </div>
+    <% else %>
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <!-- Formulário de checkout -->
+        <div class="p-6 bg-white rounded-lg shadow-lg">
+          <h2 class="text-xl font-serif text-[#2D3047] mb-6 pb-2 border-b">Dados de Contato</h2>
+          <form class="space-y-6">
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div>
+                <label for="name" class="block mb-1 text-sm font-medium text-gray-700">Nome</label>
+                <input type="text" id="name" name="name" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#73C8A9] focus:border-[#73C8A9]">
+              </div>
+              <div>
+                <label for="email" class="block mb-1 text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#73C8A9] focus:border-[#73C8A9]">
+              </div>
+            </div>
+            <div>
+              <label for="phone" class="block mb-1 text-sm font-medium text-gray-700">Telefone</label>
+              <input type="tel" id="phone" name="phone" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#73C8A9] focus:border-[#73C8A9]">
+            </div>
+            <div class="pt-4 border-t">
+              <h2 class="text-xl font-serif text-[#2D3047] mb-6">Pagamento</h2>
+              <p class="mb-4 italic text-gray-600">Forma de pagamento indisponível no momento. Será implementada em breve.</p>
+            </div>
+            <div>
+              <button type="submit" class="w-full py-3 px-6 bg-[#2D3047] text-white rounded-md hover:bg-[#2D3047]/90 transition-colors">
+                Finalizar Pedido
+              </button>
+            </div>
+          </form>
+        </div>
+        <!-- Resumo do pedido -->
+        <div>
+          <div class="p-6 mb-4 bg-white rounded-lg shadow-lg">
+            <h2 class="text-xl font-serif text-[#2D3047] mb-6 pb-2 border-b">Resumo do Pedido</h2>
+            <div class="space-y-4">
+              <% @cart_items.each do |cart_item| %>
+                <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0 mr-4 overflow-hidden rounded h-14 w-14">
+                      <% if cart_item[:item].image.present? %>
+                        <%= image_tag cart_item[:item].image, class: "h-full w-full object-cover" %>
+                      <% else %>
+                        <div class="flex items-center justify-center w-full h-full bg-gray-200">
+                          <span class="text-xs text-gray-400">Sem imagem</span>
+                        </div>
+                      <% end %>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-900"><%= cart_item[:item].name %></p>
+                      <p class="text-xs text-gray-500">Qtd: <%= cart_item[:quantity] %></p>
+                    </div>
+                  </div>
+                  <div class="text-sm font-medium text-gray-900">
+                    R$ <%= number_with_precision(cart_item[:subtotal], precision: 2, separator: ',') %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <div class="pt-4 mt-6 border-t border-gray-200">
+              <div class="flex items-center justify-between">
+                <span class="text-base font-medium text-gray-900">Subtotal</span>
+                <span class="text-base font-medium text-gray-900">R$ <%= number_with_precision(@total, precision: 2, separator: ',') %></span>
+              </div>
+              <div class="flex items-center justify-between mt-2">
+                <span class="text-base font-medium text-gray-900">Frete</span>
+                <span class="text-base font-medium text-gray-900">Grátis</span>
+              </div>
+              <div class="flex items-center justify-between pt-4 mt-4 border-t border-gray-200">
+                <span class="text-lg font-bold text-[#2D3047]">Total</span>
+                <span class="text-lg font-bold text-[#2D3047]">R$ <%= number_with_precision(@total, precision: 2, separator: ',') %></span>
+              </div>
+            </div>
+          </div>
+          <div class="text-center">
+            <a href="<%= cart_path %>" class="font-medium text-[#73C8A9] hover:text-[#73C8A9]/80">
+              Voltar ao carrinho
+            </a>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
