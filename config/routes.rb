@@ -29,4 +29,13 @@ Rails.application.routes.draw do
       get :generate
     end
   end
+
+  # Gift Registry
+  get 'gift-registry', to: 'gift_registry#index', as: :gift_registry
+  post 'gift-registry/add-to-cart/:id', to: 'gift_registry#add_to_cart', as: :add_to_cart
+  get 'gift-registry/cart', to: 'gift_registry#cart', as: :cart
+  delete 'gift-registry/cart/:id', to: 'gift_registry#remove_from_cart', as: :remove_from_cart
+  get 'gift-registry/checkout', to: 'gift_registry#checkout', as: :checkout
+  post 'gift-registry/buy-now/:id', to: 'gift_registry#buy_now', as: :buy_now
+  delete 'gift-registry/cart', to: 'gift_registry#empty_cart', as: :empty_cart
 end
