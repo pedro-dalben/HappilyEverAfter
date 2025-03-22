@@ -1,0 +1,44 @@
+<div class="min-h-screen flex items-center justify-center bg-[#73C8A9]/20 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div>
+      <div class="flex justify-center">
+        <svg class="w-16 h-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h2 class="mt-6 text-center text-3xl font-serif text-[#2D3047]">
+        Pedido recebido!
+      </h2>
+      <p class="mt-2 text-sm text-center text-gray-600">
+        Agradecemos por seu presente, <%= @order.customer_name %>
+      </p>
+    </div>
+    <div class="mt-8">
+      <h3 class="text-lg font-medium text-gray-900">Detalhes do pedido:</h3>
+      <ul class="mt-2">
+        <li class="text-sm text-gray-600">
+          <span class="font-medium">Número do pedido:</span> #<%= @order.id %>
+        </li>
+        <li class="text-sm text-gray-600">
+          <span class="font-medium">Status:</span> <%= @order.status.humanize %>
+        </li>
+        <li class="text-sm text-gray-600">
+          <span class="font-medium">Total:</span> R$ <%= number_with_precision(@order.total, precision: 2, separator: ',') %>
+        </li>
+      </ul>
+    </div>
+    <div class="mt-8 text-center">
+      <p class="text-sm text-gray-600">
+        Você receberá um email com os detalhes da compra em breve.
+      </p>
+      <div class="mt-6">
+        <%= link_to "Voltar à Lista de Presentes", gift_registry_path, class: "group relative inline-flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#73C8A9] hover:bg-[#73C8A9]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#2D3047]" %>
+      </div>
+      <p class="mt-4">
+        <a href="<%= root_path %>" class="font-medium text-[#73C8A9] hover:text-[#73C8A9]/80">
+          Voltar ao início
+        </a>
+      </p>
+    </div>
+  </div>
+</div>

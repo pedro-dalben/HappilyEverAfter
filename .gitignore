@@ -8,7 +8,10 @@
 /.bundle
 
 # Ignore all environment files.
-/.env*
+/.env
+/.env
+/.env.dev
+
 
 # Ignore all logfiles and tempfiles.
 /log/*

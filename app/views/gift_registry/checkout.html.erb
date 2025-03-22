@@ -13,31 +13,69 @@
         <!-- Formulário de checkout -->
         <div class="p-6 bg-white rounded-lg shadow-lg">
           <h2 class="text-xl font-serif text-[#2D3047] mb-6 pb-2 border-b">Dados de Contato</h2>
-          <form class="space-y-6">
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <%= form_with model: @order, url: process_payment_path, class: "space-y-6" do |f| %>
+            <div class="grid grid-cols-1 gap-6">
               <div>
-                <label for="name" class="block mb-1 text-sm font-medium text-gray-700">Nome</label>
-                <input type="text" id="name" name="name" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#73C8A9] focus:border-[#73C8A9]">
+                <%= f.label :customer_name, "Nome Completo", class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <%= f.text_field :customer_name, class: "w-full p-2 border border-gray-300 rounded-md focus:ring-[#73C8A9] focus:border-[#73C8A9]", required: true %>
               </div>
               <div>
-                <label for="email" class="block mb-1 text-sm font-medium text-gray-700">Email</label>
-                <input type="email" id="email" name="email" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#73C8A9] focus:border-[#73C8A9]">
+                <%= f.label :customer_email, "Email", class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <%= f.email_field :customer_email, class: "w-full p-2 border border-gray-300 rounded-md focus:ring-[#73C8A9] focus:border-[#73C8A9]", required: true %>
               </div>
-            </div>
-            <div>
-              <label for="phone" class="block mb-1 text-sm font-medium text-gray-700">Telefone</label>
-              <input type="tel" id="phone" name="phone" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#73C8A9] focus:border-[#73C8A9]">
+              <div>
+                <%= f.label :customer_cpf_cnpj, "CPF ou CNPJ", class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <%= f.text_field :customer_cpf_cnpj, class: "w-full p-2 border border-gray-300 rounded-md focus:ring-[#73C8A9] focus:border-[#73C8A9]", required: true, placeholder: "Somente números" %>
+              </div>
+              <div>
+                <%= f.label :customer_phone, "Telefone", class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <%= f.telephone_field :customer_phone, class: "w-full p-2 border border-gray-300 rounded-md focus:ring-[#73C8A9] focus:border-[#73C8A9]", required: true, placeholder: "(00) 00000-0000" %>
+              </div>
             </div>
             <div class="pt-4 border-t">
-              <h2 class="text-xl font-serif text-[#2D3047] mb-6">Pagamento</h2>
-              <p class="mb-4 italic text-gray-600">Forma de pagamento indisponível no momento. Será implementada em breve.</p>
+              <h2 class="text-xl font-serif text-[#2D3047] mb-6">Forma de Pagamento</h2>
+              <div class="space-y-4">
+                <div class="flex items-center">
+                  <%= f.radio_button :payment_method, "credit_card", class: "h-4 w-4 text-[#73C8A9] focus:ring-[#73C8A9]", checked: true %>
+                  <%= f.label :payment_method_credit_card, class: "ml-3 block text-sm font-medium text-gray-700" do %>
+                    <div class="flex items-center">
+                      <span>Cartão de Crédito</span>
+                      <div class="flex ml-2 space-x-1">
+                        <svg class="w-10 h-6" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect width="40" height="24" rx="4" fill="#1A1F71"/>
+                          <path d="M15.025 15.464H12.238L14.01 8.536H16.797L15.025 15.464Z" fill="white"/>
+                          <path d="M22.314 8.647C21.773 8.436 20.946 8.2 19.932 8.2C17.698 8.2 16.104 9.34 16.091 10.933C16.079 12.096 17.234 12.746 18.109 13.13C19.01 13.525 19.307 13.784 19.303 14.152C19.296 14.708 18.57 14.96 17.895 14.96C16.954 14.96 16.451 14.811 15.693 14.463L15.343 14.303L14.961 16.32C15.605 16.608 16.819 16.86 18.081 16.872C20.457 16.872 22.018 15.748 22.036 14.042C22.044 13.135 21.485 12.44 20.091 11.843C19.246 11.461 18.741 11.206 18.748 10.817C18.748 10.467 19.172 10.095 20.091 10.095C20.861 10.083 21.416 10.28 21.845 10.484L22.082 10.599L22.457 8.662L22.314 8.647Z" fill="white"/>
+                          <path d="M25.704 8.536H23.582L21.416 15.464H23.538L25.704 8.536Z" fill="white"/>
+                          <path d="M29.152 12.027L29.574 10.563L30.187 12.027H29.152ZM31.124 8.536H29.477C28.979 8.536 28.603 8.691 28.381 9.179L25.134 15.464H27.475C27.475 15.464 27.847 14.493 27.928 14.281C28.162 14.281 30.591 14.283 30.881 14.283C30.944 14.552 31.139 15.464 31.139 15.464H33.23L31.124 8.536Z" fill="white"/>
+                        </svg>
+                        <svg class="w-10 h-6" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect width="40" height="24" rx="4" fill="#EB001B" fill-opacity="0.15"/>
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M16 12C16 8.68629 18.6863 6 22 6C25.3137 6 28 8.68629 28 12C28 15.3137 25.3137 18 22 18C18.6863 18 16 15.3137 16 12ZM22 9C20.3431 9 19 10.3431 19 12C19 13.6569 20.3431 15 22 15C23.6569 15 25 13.6569 25 12C25 10.3431 23.6569 9 22 9Z" fill="#EB001B"/>
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 12C12 8.68629 14.6863 6 18 6C21.3137 6 24 8.68629 24 12C24 15.3137 21.3137 18 18 18C14.6863 18 12 15.3137 12 12ZM18 9C16.3431 9 15 10.3431 15 12C15 13.6569 16.3431 15 18 15C19.6569 15 21 13.6569 21 12C21 10.3431 19.6569 9 18 9Z" fill="#F79E1B"/>
+                        </svg>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="flex items-center">
+                  <%= f.radio_button :payment_method, "pix", class: "h-4 w-4 text-[#73C8A9] focus:ring-[#73C8A9]" %>
+                  <%= f.label :payment_method_pix, class: "ml-3 block text-sm font-medium text-gray-700" do %>
+                    <div class="flex items-center">
+                      <span>PIX</span>
+                      <div class="ml-2">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9.5 4.25L4.73867 9.01133C3.80404 9.94596 3.80404 11.4457 4.73867 12.3803L11.62 19.2617C12.5546 20.1963 14.0544 20.1963 14.989 19.2617L19.75 14.5M14.45 5.5L17.4 8.45M6.25 17.25L17.75 5.75" stroke="#32bcad" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
             </div>
             <div>
-              <button type="submit" class="w-full py-3 px-6 bg-[#2D3047] text-white rounded-md hover:bg-[#2D3047]/90 transition-colors">
-                Finalizar Pedido
-              </button>
+              <%= f.submit "Finalizar Pedido", class: "w-full py-3 px-6 bg-[#2D3047] text-white rounded-md hover:bg-[#2D3047]/90 transition-colors" %>
             </div>
-          </form>
+          <% end %>
         </div>
         <!-- Resumo do pedido -->
         <div>
