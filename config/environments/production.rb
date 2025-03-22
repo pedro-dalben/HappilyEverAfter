@@ -90,4 +90,9 @@ Rails.application.configure do
   # Permitir redirecionamentos para o Asaas
   config.hosts << "sandbox.asaas.com"
   config.hosts << "www.asaas.com"
+
+  config.action_cable.allowed_request_origins = [ /http:\/\/*/, /https:\/\/*/ ]
+  config.action_cable.url = "wss://giovanaepedro.com.br/cable"
+  config.action_cable.mount_path = "/cable"
+  config.hosts << "www.giovanaepedro.com.br"
 end
