@@ -42,4 +42,5 @@ Rails.application.routes.draw do
   post "gift-registry/buy-now/:id", to: "gift_registry#buy_now", as: :buy_now
   delete "gift-registry/cart", to: "gift_registry#empty_cart", as: :empty_cart
   get "gift-registry/thank-you/:id", to: "gift_registry#thank_you", as: :thank_you
+  get "gift-registry/payment-transition/:id", to: "gift_registry#payment_transition", as: "payment_transition"
 end

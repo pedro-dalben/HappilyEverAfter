@@ -6,9 +6,17 @@ class WhatsappMessagesController < AdminController
   end
 
   def create
-    # Permite o upload da imagem e o conteúdo, além de receber um array de family_ids.
     permitted_params = message_params
-    family_ids = permitted_params.delete(:family_ids).reject(&:blank?)
+    family_ids = permitted_params.delete(:family_ids)
+
+    if family_ids.blank? || family_ids.reject(&:blank?).empty?
+      @message = WhatsappMessage.new(permitted_params)
+      @message.errors.add(:base, "Selecione pelo menos uma família para enviar a mensagem")
+      @recipients = Family.all
+      return render :new
+    end
+
+    family_ids = family_ids.reject(&:blank?)
     @message = WhatsappMessage.new(permitted_params)
     @message.families = Family.where(id: family_ids)
     @message.total_count = family_ids.size
@@ -17,9 +25,12 @@ class WhatsappMessagesController < AdminController
     @message.status = WhatsappMessage::STATUS_PENDING
 
     if @message.save
-      WhatsappMessageWorker.perform_async(@message.id)
+      # Usamos perform_in para dar tempo para a transação do banco de dados ser completada
+      # Aumentando para 5 segundos para garantir que a transação seja confirmada
+      WhatsappMessageWorker.perform_in(5.seconds, @message.id)
       redirect_to whatsapp_messages_path, notice: "Mensagem agendada para envio para #{@message.total_count} famílias."
     else
+      @recipients = Family.all
       render :new
     end
   end
