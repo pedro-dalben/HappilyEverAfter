@@ -5,6 +5,9 @@ class WhatsappMessage < ApplicationRecord
   # Upload de imagem via ActiveStorage
   has_one_attached :image
 
+  validates :content, presence: true
+  validates :families, presence: true
+
   # Status global da mensagem (batch)
   # Como o enum nativo não funcionou para você, definiremos manualmente:
   STATUS_PENDING  = "pending"

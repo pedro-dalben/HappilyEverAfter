@@ -119,24 +119,20 @@ class GiftRegistryController < ApplicationController
           # Limpa o carrinho após finalização
           session[:cart] = []
 
-          # Redireciona para a URL de pagamento do Asaas com permissão explícita
-          redirect_to payment_data["invoiceUrl"], allow_other_host: true
+          redirect_to payment_transition_path(id: @order.id)
         else
           @order.update(status: "failed")
-          prepare_cart_items
           flash[:alert] = "Erro ao processar pagamento"
-          render :checkout
+          redirect_to checkout_path
         end
       else
         @order.update(status: "failed")
-        prepare_cart_items
         flash[:alert] = "Erro ao criar cliente"
-        render :checkout
+        redirect_to checkout_path
       end
     else
-      # Se falhar a validação, retorna para checkout
-      prepare_cart_items
-      render :checkout
+      flash[:alert] = "Erro ao salvar pedido: #{@order.errors.full_messages.join(', ')}"
+      redirect_to checkout_path
     end
   end
 
@@ -207,6 +203,11 @@ class GiftRegistryController < ApplicationController
     render :order_status
   end
 
+  def payment_transition
+    @order = Order.find(params[:id])
+    @payment_url = @order.payment_url
+  end
+
   private
 
   def order_params
@@ -244,7 +245,6 @@ class GiftRegistryController < ApplicationController
     end
   end
 
-  # Método auxiliar para preparar itens do carrinho
   def prepare_cart_items
     @cart_items = []
     @total = 0
@@ -288,7 +288,11 @@ class GiftRegistryController < ApplicationController
       dueDate: Date.today.strftime("%Y-%m-%d"),
       description: "Pedido ##{order.id}",
       externalReference: order.id.to_s,
-      postalService: false
+      postalService: false,
+      callback: {
+        successUrl: thank_you_url(order),
+        autoRedirect: true
+      }
     }
 
     AsaasService.create_payment(payment_data)
@@ -311,9 +315,6 @@ class GiftRegistryController < ApplicationController
       status: "paid",
       payment_data: payment_data.to_json
     )
-
-    # Aqui você pode adicionar lógica adicional após confirmação
-    # Por exemplo, enviar email de confirmação, etc.
   end
 
   def process_payment_overdue(payment_data)

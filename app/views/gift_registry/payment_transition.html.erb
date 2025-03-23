@@ -1,0 +1,13 @@
+<div class="min-h-screen bg-[#73C8A9]/20 pt-16 pb-24 flex items-center justify-center">
+  <div class="container max-w-md px-4 mx-auto text-center">
+    <h1 class="text-3xl font-serif text-[#2D3047] mb-6">Redirecionando para o pagamento</h1>
+    <p class="mb-8 text-gray-600">Por favor, aguarde enquanto redirecionamos você para a página de pagamento...</p>
+    <div class="w-16 h-16 mx-auto mb-8 border-4 border-[#73C8A9] border-t-transparent rounded-full animate-spin"></div>
+    <p class="text-sm text-gray-500">Se você não for redirecionado automaticamente, <a href="<%= @payment_url %>" class="text-[#73C8A9] underline">clique aqui</a>.</p>
+    <script>
+      setTimeout(function() {
+        window.location.href = "<%= @payment_url %>";
+      }, 2000);
+    </script>
+  </div>
+</div>
