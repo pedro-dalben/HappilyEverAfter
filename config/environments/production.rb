@@ -95,4 +95,5 @@ Rails.application.configure do
   config.action_cable.url = "wss://giovanaepedro.com.br/cable"
   config.action_cable.mount_path = "/cable"
   config.hosts << "www.giovanaepedro.com.br"
+  config.hosts << "giovanaepedro.com.br"
 end

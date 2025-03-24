@@ -71,5 +71,6 @@ Rails.application.configure do
   # config.generators.apply_rubocop_autocorrect_after_generate!
   config.hosts << "sandbox.asaas.com"
   config.hosts << "www.asaas.com"
+  config.hosts << "giovanaepedro.com.br"
 end
 Rails.application.routes.default_url_options[:host] = "localhost:3000"
