@@ -14,15 +14,12 @@
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-    <!-- Tailwind CSS (using CDN here, adjust if you use asset pipeline) -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- AOS CSS (for scroll animations) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
     <!-- Google Font: Beautifully Delicious -->
     <link href="https://fonts.googleapis.com/css2?family=Beautifully+Delicious&display=swap" rel="stylesheet">
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "home", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
-    <%= turbo_include_tags %>
   </head>
   <body>
     <%= yield %>
