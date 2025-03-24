@@ -1,0 +1,33 @@
+<div class="min-h-screen flex items-center justify-center bg-[#73C8A9]/20 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-lg shadow-lg">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-serif text-[#2D3047]">
+        Lista de Presentes
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Informe o código de acesso para visualizar a lista de presentes do casamento
+      </p>
+    </div>
+    <% if flash[:alert] %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline"><%= flash[:alert] %></span>
+      </div>
+    <% end %>
+    <%= form_with url: gift_registry_verify_token_path, method: :post, class: "mt-8 space-y-6" do |f| %>
+      <div class="rounded-md -space-y-px">
+        <div>
+          <%= f.label :token, "Código de Acesso", class: "sr-only" %>
+          <%= f.text_field :token, class: "appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#73C8A9] focus:border-[#73C8A9]", placeholder: "Informe o código de acesso", required: true, autofocus: true %>
+        </div>
+      </div>
+      <div>
+        <%= f.submit "Acessar Lista de Presentes", class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#2D3047] hover:bg-[#2D3047]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#73C8A9]" %>
+      </div>
+    <% end %>
+    <div class="mt-6 text-center">
+      <a href="<%= root_path %>" class="font-medium text-[#73C8A9] hover:text-[#73C8A9]/80">
+        Voltar ao início
+      </a>
+    </div>
+  </div>
+</div>
