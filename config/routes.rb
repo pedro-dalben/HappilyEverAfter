@@ -32,6 +32,8 @@ Rails.application.routes.draw do
 
   # Gift Registry
   get "gift-registry", to: "gift_registry#index", as: :gift_registry
+  get "gift-registry/authenticate", to: "gift_registry#authenticate", as: :gift_registry_authenticate
+  post "gift-registry/verify-token", to: "gift_registry#verify_token", as: :gift_registry_verify_token
   post "gift-registry/add-to-cart/:id", to: "gift_registry#add_to_cart", as: :add_to_cart
   get "gift-registry/cart", to: "gift_registry#cart", as: :cart
   delete "gift-registry/cart/:id", to: "gift_registry#remove_from_cart", as: :remove_from_cart
@@ -43,4 +45,5 @@ Rails.application.routes.draw do
   delete "gift-registry/cart", to: "gift_registry#empty_cart", as: :empty_cart
   get "gift-registry/thank-you/:id", to: "gift_registry#thank_you", as: :thank_you
   get "gift-registry/payment-transition/:id", to: "gift_registry#payment_transition", as: "payment_transition"
+  get "gift-registry/family-purchases/:token", to: "gift_registry#family_purchases", as: :family_purchases
 end
