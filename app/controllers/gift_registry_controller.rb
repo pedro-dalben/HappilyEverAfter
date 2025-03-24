@@ -1,5 +1,6 @@
 class GiftRegistryController < ApplicationController
   before_action :authenticate_with_token, only: [ :index, :add_to_cart, :cart, :remove_from_cart, :checkout, :buy_now, :empty_cart ]
+  skip_before_action :authenticate_with_token, only: [ :authenticate, :verify_token ]
 
   def index
     @gift_items = GiftItem.all
@@ -584,6 +585,9 @@ class GiftRegistryController < ApplicationController
         return true
       end
     end
+
+    # Prevenir loop infinito - não redirecionar se já estiver na página de autenticação
+    return true if [ "authenticate", "verify_token" ].include?(action_name)
 
     # Redirecionar para a página de autenticação se token não for válido
     flash[:alert] = "É necessário um código válido para acessar a lista de presentes"
