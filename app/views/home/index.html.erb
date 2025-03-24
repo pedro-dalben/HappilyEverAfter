@@ -2,7 +2,7 @@
 <section class="relative h-screen overflow-hidden bg-gradient-to-b from-[#FF8C42] to-[#2D3047]">
   <!-- Background Image com Overlay -->
   <div class="absolute inset-0 w-full h-full">
-    <%= image_tag "paisagem.jpg", class: "object-cover w-full h-full opacity-90" %>
+    <%= image_tag asset_path("paisagem.jpg"), class: "object-cover w-full h-full opacity-90" %>
     <!-- Gradiente overlay inspirado no pôr do sol -->
     <%# <div class="absolute inset-0 bg-gradient-to-br from-[#ffb2479c] via-[#ffcc3346] to-[#ff10288f]"></div> %>
     <%# <div class="absolute inset-0 bg-gradient-to-b from-[#F8C8DC] via-[#c38cd683] to-[#3C1361]"></div> %>
@@ -43,7 +43,7 @@
       </div>
       <div class="relative h-[600px] group">
         <div class="absolute inset-0 transition-transform duration-500 transform hover:scale-95">
-          <%= image_tag "aliancas.jpg", class: "object-cover w-full h-full rounded-lg shadow-2xl" %>
+          <%= image_tag asset_path("aliancas.jpg"), class: "object-cover w-full h-full rounded-lg shadow-2xl" %>
         </div>
       </div>
     </div>
@@ -59,7 +59,7 @@
              data-aos="fade-up"
              data-aos-delay="<%= i * 100 %>"
              onclick="openModal(<%= i %>)">
-          <%= image_tag "carrosel/#{image}",
+          <%= image_tag asset_path("carrosel/#{image}"),
               alt: "Slide #{i+1}",
               class: "object-cover w-full transition-transform duration-700 transform aspect-square hover:scale-110" %>
         </div>
@@ -81,7 +81,7 @@
       <% @carousel_images.each do |image| %>
         <div class="flex items-center justify-center swiper-slide">
           <div class="relative flex items-center justify-center w-full h-full p-4">
-            <%= image_tag "carrosel/#{image}",
+            <%= image_tag asset_path("carrosel/#{image}"),
                 class: "max-w-full max-h-full h-auto w-auto object-contain" %>
           </div>
         </div>
@@ -388,6 +388,3 @@
     swiper?.autoplay.start();
   });
 </script>
-<!-- Primeiro, adicione estes links no HEAD do seu layout ou no topo desta view -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

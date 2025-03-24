@@ -14,10 +14,9 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
     <!-- Stylesheets -->
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <!-- JavaScript -->
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
-    <%= turbo_include_tags %>
   </head>
   <body class="min-h-screen bg-gray-100">
     <div class="flex h-screen">
