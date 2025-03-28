@@ -8,7 +8,7 @@
         Informe o código de acesso para visualizar a lista de presentes do casamento
       </p>
     </div>
-    <% if flash[:alert] %>
+    <% if flash[:alert] && !flash[:alert].to_s.start_with?('admin_') %>
       <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
         <span class="block sm:inline"><%= flash[:alert] %></span>
       </div>

@@ -5,13 +5,17 @@ class AsaasService
   PRODUCTION_URL = "https://www.asaas.com/api/v3".freeze
 
   def self.base_uri
-    Rails.env.production? ? PRODUCTION_URL : SANDBOX_URL
+    ENV["ASAAS_ENVIRONMENT"] == "production" ? PRODUCTION_URL : SANDBOX_URL
   end
 
   def self.headers
+    api_key = ENV["ASAAS_API_KEY"]
+    # Registrar a chave para debugging
+    Rails.logger.info("Usando chave da API Asaas: #{api_key.nil? ? 'Não encontrada' : api_key[0..10] + '...'}")
+
     {
       "Content-Type" => "application/json",
-      "access_token" => ENV["ASAAS_API_KEY"] || Rails.application.credentials.asaas[:api_key]
+      "access_token" => api_key || Rails.application.credentials.asaas[:api_key]
     }
   end
 

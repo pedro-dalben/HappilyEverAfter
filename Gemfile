@@ -14,6 +14,9 @@ gem "pg", "~> 1.1"
 # Web server
 gem "puma", ">= 5.0"
 
+# ariáveis de ambiente
+gem "dotenv-rails"
+
 # --------------------------------------------
 # 🚀 Frontend & Hotwire
 # --------------------------------------------

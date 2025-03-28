@@ -3,7 +3,7 @@ class GiftRegistryController < ApplicationController
   skip_before_action :authenticate_with_token, only: [ :authenticate, :verify_token ]
 
   def index
-    @gift_items = GiftItem.all
+    @gift_items = GiftItem.active
   end
 
   def add_to_cart
@@ -11,9 +11,30 @@ class GiftRegistryController < ApplicationController
     session[:cart] ||= []
     session[:cart] << id
 
+    gift_item = GiftItem.find_by(id: id)
+    item_name = gift_item ? gift_item.name : "Item"
+
     respond_to do |format|
-      format.html { redirect_to gift_registry_path, notice: "Item adicionado ao carrinho." }
-      format.json { render json: { cart_count: session[:cart].size }, status: :ok }
+      format.html {
+        redirect_to gift_registry_path, notice: "Item adicionado ao carrinho.", status: :see_other
+      }
+      format.json {
+        render json: {
+          cart_count: session[:cart].size,
+          message: "#{item_name} adicionado ao carrinho com sucesso!",
+          success: true
+        }, status: :ok
+      }
+      format.turbo_stream {
+        render turbo_stream: [
+          turbo_stream.replace("cart-counter",
+            partial: "gift_registry/cart_counter",
+            locals: { count: session[:cart].size }),
+          turbo_stream.append("toast-container",
+            partial: "shared/toast",
+            locals: { message: "#{item_name} adicionado ao carrinho com sucesso!" })
+        ]
+      }
     end
   end
 
@@ -43,7 +64,7 @@ class GiftRegistryController < ApplicationController
     id = params[:id].to_i
     session[:cart].delete_at(session[:cart].index(id) || session[:cart].length)
 
-    redirect_to cart_path, notice: "Item removido do carrinho."
+    redirect_to cart_path, flash: { cart_notice: "Item removido do carrinho." }, status: :see_other
   end
 
   def checkout
@@ -78,7 +99,7 @@ class GiftRegistryController < ApplicationController
 
   def empty_cart
     session[:cart] = []
-    redirect_to cart_path, notice: "Carrinho esvaziado."
+    redirect_to cart_path, notice: "Carrinho esvaziado.", status: :see_other
   end
 
   def thank_you

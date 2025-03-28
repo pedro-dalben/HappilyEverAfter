@@ -1,0 +1,10 @@
+<div class="toast-message" data-controller="toast" data-toast-message-value="<%= message %>">
+  <script>
+    if (typeof showToast === 'function') {
+      showToast('<%= j message %>');
+    } else {
+      // Fallback caso a função showToast não esteja disponível
+      alert('<%= j message %>');
+    }
+  </script>
+</div>

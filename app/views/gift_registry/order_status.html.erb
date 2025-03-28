@@ -1,9 +1,9 @@
 <div class="min-h-screen bg-[#73C8A9]/20 pt-16 pb-24">
   <div class="container max-w-3xl px-4 mx-auto">
-    <h1 class="text-3xl font-serif text-[#2D3047] mb-10">Status do Pedido #<%= @order.id %></h1>
+    <h1 class="text-3xl font-serif text-[#2D3047] mb-10 text-center sm:text-left">Status do Pedido #<%= @order.id %></h1>
     <div class="p-6 bg-white rounded-lg shadow-lg">
       <div class="pb-4 mb-6 border-b">
-        <h2 class="text-xl font-serif text-[#2D3047] mb-2">Informações do Pedido</h2>
+        <h2 class="text-xl font-serif text-[#2D3047] mb-2 text-center sm:text-left">Informações do Pedido</h2>
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <p class="text-sm text-gray-500">Cliente</p>
@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="mb-6">
-        <h2 class="text-xl font-serif text-[#2D3047] mb-4">Status do Pagamento</h2>
+        <h2 class="text-xl font-serif text-[#2D3047] mb-4 text-center sm:text-left">Status do Pagamento</h2>
         <% status_class = {
           "pending" => "bg-yellow-100 text-yellow-800",
           "paid" => "bg-green-100 text-green-800",
@@ -51,23 +51,23 @@
           "refunded" => "Pagamento Reembolsado",
           "cancelled" => "Pagamento Cancelado"
         } %>
-        <div class="flex items-center">
+        <div class="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-4">
           <span class="px-3 py-1 rounded-full text-sm font-medium <%= status_class[@order.status] || 'bg-gray-100 text-gray-800' %>">
             <%= status_text[@order.status] || @order.status.humanize %>
           </span>
           <% if @order.status == "pending" && @order.payment_url.present? %>
-            <a href="<%= @order.payment_url %>" target="_blank" class="ml-4 px-4 py-2 text-sm bg-[#73C8A9] text-white rounded hover:bg-[#73C8A9]/90">
+            <a href="<%= @order.payment_url %>" target="_blank" class="px-4 py-2 text-sm bg-[#73C8A9] text-white rounded hover:bg-[#73C8A9]/90">
               Continuar Pagamento
             </a>
           <% end %>
         </div>
       </div>
       <div>
-        <h2 class="text-xl font-serif text-[#2D3047] mb-4">Itens do Pedido</h2>
+        <h2 class="text-xl font-serif text-[#2D3047] mb-4 text-center sm:text-left">Itens do Pedido</h2>
         <div class="space-y-4">
           <% @order.order_items.each do |item| %>
-            <div class="flex items-center justify-between py-2 border-b border-gray-100">
-              <div class="flex items-center">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 border-b border-gray-100">
+              <div class="flex items-center mb-2 sm:mb-0">
                 <div class="flex-shrink-0 mr-4 overflow-hidden rounded h-14 w-14">
                   <% if item.gift_item.image.present? %>
                     <%= image_tag item.gift_item.image, class: "h-full w-full object-cover" %>
@@ -82,7 +82,7 @@
                   <p class="text-xs text-gray-500">Qtd: <%= item.quantity %></p>
                 </div>
               </div>
-              <div class="text-sm font-medium text-gray-900">
+              <div class="text-sm font-medium text-gray-900 ml-auto sm:ml-0">
                 R$ <%= number_with_precision(item.price * item.quantity, precision: 2, separator: ',') %>
               </div>
             </div>

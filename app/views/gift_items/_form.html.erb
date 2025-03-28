@@ -12,6 +12,10 @@
       <%= f.label :image, class: "block text-gray-700 font-medium mb-1" %>
       <%= f.input :image, as: :file, label: false, input_html: { class: "w-full border border-gray-300 rounded py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" } %>
     </div>
+    <div class="mb-4 flex items-center">
+      <%= f.check_box :disabled, class: "form-checkbox h-5 w-5 text-blue-600 mr-2" %>
+      <%= f.label :disabled, "Desabilitar este item?", class: "text-gray-700" %>
+    </div>
     <div class="flex space-x-2">
       <%= f.button :submit, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
       <%= link_to "Cancel", gift_items_path, class: "bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" %>

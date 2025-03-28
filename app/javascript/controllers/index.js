@@ -7,6 +7,9 @@ import { application } from './application'
 import DeleteController from './delete_controller'
 application.register('delete', DeleteController)
 
+import FlashController from './flash_controller'
+application.register('flash', FlashController)
+
 import HelloController from './hello_controller'
 application.register('hello', HelloController)
 
@@ -18,3 +21,6 @@ application.register('select-all', SelectAllController)
 
 import SweetAlertController from './sweet_alert_controller'
 application.register('sweet-alert', SweetAlertController)
+
+import ToastController from './toast_controller'
+application.register('toast', ToastController)

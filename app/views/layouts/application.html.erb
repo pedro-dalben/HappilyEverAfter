@@ -22,11 +22,74 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
   <body>
+    <!-- Flash Messages -->
+    <% if flash.any? %>
+      <div class="fixed top-0 left-0 right-0 z-50 p-4 mt-16 flex flex-col items-center space-y-2">
+        <% flash.each do |type, message| %>
+          <% next if type.to_s.start_with?('admin_') %>
+          <% flash_class = type.to_s == "notice" ? "bg-green-100 border-green-400 text-green-700" : "bg-red-100 border-red-400 text-red-700" %>
+          <div class="<%= flash_class %> px-4 py-3 rounded border relative max-w-md w-full"
+               role="alert"
+               data-controller="flash"
+               data-action="click->flash#dismiss"
+               data-flash-target="message"
+               data-flash-auto-dismiss-after-value="5000">
+            <span class="block sm:inline"><%= message %></span>
+            <button type="button" class="absolute top-0 right-0 mt-2 mr-2" data-action="flash#dismiss">
+              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
     <%= yield %>
     <!-- AOS JS -->
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
       AOS.init({ once: true });
+    </script>
+
+    <!-- Toast Notification -->
+    <div id="toast-notification" class="fixed bottom-4 right-4 max-w-md py-3 px-4 bg-[#73C8A9] text-white rounded-lg shadow-lg transform translate-y-24 opacity-0 transition-all duration-300 z-50" style="display: none;">
+      <div class="flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <span id="toast-message"></span>
+      </div>
+    </div>
+
+    <script>
+      function showToast(message, duration = 3000) {
+        const toast = document.getElementById('toast-notification');
+        const toastMessage = document.getElementById('toast-message');
+
+        // Set message
+        toastMessage.textContent = message;
+
+        // Show toast
+        toast.style.display = 'block';
+
+        // Trigger animation
+        setTimeout(() => {
+          toast.classList.remove('translate-y-24', 'opacity-0');
+          toast.classList.add('translate-y-0', 'opacity-100');
+        }, 10);
+
+        // Hide after duration
+        setTimeout(() => {
+          toast.classList.remove('translate-y-0', 'opacity-100');
+          toast.classList.add('translate-y-24', 'opacity-0');
+
+          // Hide element after animation
+          setTimeout(() => {
+            toast.style.display = 'none';
+          }, 300);
+        }, duration);
+      }
     </script>
   </body>
 </html>

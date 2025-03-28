@@ -9,6 +9,7 @@
       <tr>
         <th class="px-4 py-2 text-sm font-medium text-left text-gray-600">Name</th>
         <th class="px-4 py-2 text-sm font-medium text-left text-gray-600">Price</th>
+        <th class="px-4 py-2 text-sm font-medium text-left text-gray-600">Status</th>
         <th class="px-4 py-2 text-sm font-medium text-gray-600">Actions</th>
       </tr>
     </thead>
@@ -17,6 +18,13 @@
         <tr>
           <td class="px-4 py-2 text-sm text-gray-700"><%= item.name %></td>
           <td class="px-4 py-2 text-sm text-gray-700">$<%= item.price %></td>
+          <td class="px-4 py-2 text-sm">
+            <% if item.disabled? %>
+              <span class="px-2 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded-full">Desabilitado</span>
+            <% else %>
+              <span class="px-2 py-1 text-xs font-semibold text-green-600 bg-green-100 rounded-full">Ativo</span>
+            <% end %>
+          </td>
           <td class="px-4 py-2 text-sm text-right">
             <a href="<%= gift_item_path(item) %>" class="text-blue-600 hover:underline">Show</a>
             |

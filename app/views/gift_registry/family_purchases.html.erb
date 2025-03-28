@@ -1,22 +1,22 @@
 <div class="min-h-screen bg-[#73C8A9]/20 pt-16 pb-24">
   <div class="container max-w-6xl px-4 mx-auto">
-    <h1 class="text-3xl font-serif text-[#2D3047] mb-2">Lista de Presentes - Família <%= @family.name %></h1>
-    <p class="mb-10 text-gray-600">Acompanhe os presentes que foram comprados para seu casamento</p>
-    <% if flash[:notice] %>
-      <div class="relative px-4 py-3 mb-6 text-green-700 bg-green-100 border border-green-400 rounded" role="alert">
+    <h1 class="text-3xl font-serif text-[#2D3047] mb-2 text-center sm:text-left">Lista de Presentes - Família <%= @family.name %></h1>
+    <p class="mb-10 text-gray-600 text-center sm:text-left">Acompanhe os presentes que foram comprados para seu casamento</p>
+    <% if flash[:notice] && !flash[:notice].to_s.start_with?('admin_') %>
+      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">
         <span class="block sm:inline"><%= flash[:notice] %></span>
       </div>
     <% end %>
-    <% if flash[:alert] %>
-      <div class="relative px-4 py-3 mb-6 text-red-700 bg-red-100 border border-red-400 rounded" role="alert">
+    <% if flash[:alert] && !flash[:alert].to_s.start_with?('admin_') %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
         <span class="block sm:inline"><%= flash[:alert] %></span>
       </div>
     <% end %>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
       <!-- Estatísticas -->
       <div class="p-6 bg-white rounded-lg shadow-lg">
-        <h2 class="text-xl font-serif text-[#2D3047] mb-6 pb-2 border-b">Estatísticas de Presentes</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <h2 class="text-xl font-serif text-[#2D3047] mb-6 pb-2 border-b text-center sm:text-left">Estatísticas de Presentes</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="p-4 text-center bg-blue-50 rounded-lg">
             <div class="text-3xl font-bold text-blue-600"><%= @paid_orders.count %></div>
             <div class="text-sm text-gray-600">Presentes Recebidos</div>
@@ -64,10 +64,39 @@
     </div>
     <!-- Seção de Presentes Confirmados -->
     <div class="mb-10">
-      <h2 class="text-2xl font-serif text-[#2D3047] mb-4">Presentes Confirmados</h2>
+      <h2 class="text-2xl font-serif text-[#2D3047] mb-4 text-center sm:text-left">Presentes Confirmados</h2>
       <% if @paid_orders.any? %>
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div class="overflow-x-auto">
+          <!-- Versão para dispositivos móveis -->
+          <div class="block sm:hidden">
+            <% @paid_orders.each do |order| %>
+              <div class="border-b border-gray-200 p-4">
+                <div class="mb-2">
+                  <span class="font-medium">Data:</span>
+                  <%= order.paid_at&.strftime("%d/%m/%Y") || order.updated_at.strftime("%d/%m/%Y") %>
+                </div>
+                <div class="mb-2">
+                  <div class="font-medium"><%= order.customer_name %></div>
+                  <div class="text-sm text-gray-500"><%= order.customer_email %></div>
+                </div>
+                <div class="mb-2">
+                  <span class="font-medium">Itens:</span>
+                  <% order.order_items.each do |item| %>
+                    <div class="pl-2 text-sm">
+                      <%= item.quantity %>x <%= item.gift_item.name %>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="font-medium">
+                  <span>Valor:</span>
+                  R$ <%= number_with_precision(order.total, precision: 2, separator: ',') %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Versão para desktop -->
+          <div class="hidden sm:block overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
@@ -114,10 +143,51 @@
     </div>
     <!-- Seção de Pagamentos Pendentes -->
     <div class="mb-10">
-      <h2 class="text-2xl font-serif text-[#2D3047] mb-4">Pagamentos Pendentes</h2>
+      <h2 class="text-2xl font-serif text-[#2D3047] mb-4 text-center sm:text-left">Pagamentos Pendentes</h2>
       <% if @pending_orders.any? %>
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div class="overflow-x-auto">
+          <!-- Versão para dispositivos móveis -->
+          <div class="block sm:hidden">
+            <% @pending_orders.each do |order| %>
+              <div class="border-b border-gray-200 p-4">
+                <div class="mb-2">
+                  <span class="font-medium">Data:</span>
+                  <%= order.created_at.strftime("%d/%m/%Y") %>
+                </div>
+                <div class="mb-2">
+                  <div class="font-medium"><%= order.customer_name %></div>
+                  <div class="text-sm text-gray-500"><%= order.customer_email %></div>
+                </div>
+                <div class="mb-2">
+                  <span class="font-medium">Itens:</span>
+                  <% order.order_items.each do |item| %>
+                    <div class="pl-2 text-sm">
+                      <%= item.quantity %>x <%= item.gift_item.name %>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="mb-2 font-medium">
+                  <span>Valor:</span>
+                  R$ <%= number_with_precision(order.total, precision: 2, separator: ',') %>
+                </div>
+                <div class="mt-3">
+                  <% if order.payment_url.present? %>
+                    <a href="<%= order.payment_url %>" target="_blank" class="inline-flex items-center px-3 py-1 text-sm bg-[#73C8A9] text-white rounded hover:bg-[#73C8A9]/90">
+                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                      </svg>
+                      Ir para Pagamento
+                    </a>
+                  <% else %>
+                    <span class="text-gray-500">Link indisponível</span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Versão para desktop -->
+          <div class="hidden sm:block overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
