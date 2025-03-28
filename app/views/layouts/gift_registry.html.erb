@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Casamento de Pedro & Giovana" %></title>
+    <title><%= content_for(:title) || "Lista de Presentes - Casamento de Pedro & Giovana" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -11,10 +11,9 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= yield :head %>
-    <%= favicon_link_tag asset_path('aliancas-de-casamento.png') %>
-    <link rel="icon" href="/aliancas-de-casamento.png" type="image/png">
-    <link rel="icon" href="/aliancas-de-casamento.png" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/aliancas-de-casamento.png">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
     <!-- AOS CSS (for scroll animations) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
     <!-- Google Font: Beautifully Delicious -->
@@ -46,6 +45,37 @@
       </div>
     <% end %>
 
+    <!-- Header Específico para Gift Registry -->
+    <header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+          <!-- Logo/Nome do site -->
+          <a href="/" class="text-2xl font-serif text-[#2D3047]">
+            Giovana & Pedro
+          </a>
+
+          <!-- Ícones (Carrinho, Minhas Compras) - Simplificado -->
+          <div class="flex items-center space-x-4">
+            <!-- Link para Minhas Compras -->
+            <% if session[:family_token].present? %>
+              <a href="<%= family_purchases_path(token: session[:family_token]) %>" class="text-[#2D3047] hover:text-[#73C8A9] transition">
+                Minhas Compras
+              </a>
+            <% end %>
+
+            <!-- Carrinho -->
+            <a href="/gift-registry/cart" class="relative">
+              <svg class="w-6 h-6 text-[#2D3047]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+              <div id="cart-counter" style="<%= session[:cart].to_a.size > 0 ? 'display:flex' : 'display:none' %>" class="absolute -top-2.5 -right-2.5 h-5 w-5 flex items-center justify-center bg-red-600 text-white text-xs font-bold rounded-full transform translate-x-0 translate-y-0">
+                <%= session[:cart].to_a.size %>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
     <!-- Conteúdo principal -->
     <main class="pb-10">
       <%= yield %>
@@ -117,10 +147,8 @@
           const count = parseInt(cartCounter.textContent.trim());
           if (count > 0) {
             cartCounter.style.display = 'flex';
-            cartCounter.classList.remove('hidden');
           } else {
             cartCounter.style.display = 'none';
-            cartCounter.classList.add('hidden');
           }
         }
       });

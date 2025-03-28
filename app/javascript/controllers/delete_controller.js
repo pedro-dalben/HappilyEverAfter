@@ -17,8 +17,6 @@ export default class extends Controller {
 			cancelButtonColor: '#3085d6',
 			confirmButtonText: 'Sim, deletar!',
 		}).then((result) => {
-			console.log('teste 1')
-
 			if (result.isConfirmed) {
 				this.deleteItem()
 			}

@@ -5,8 +5,6 @@ export default class extends Controller {
 	static values = { pattern: String }
 
 	connect() {
-		console.log('Applying mask:', this.patternValue, 'on', this.element)
-
 		if (this.patternValue) {
 			Inputmask(this.patternValue).mask(this.element)
 		} else {

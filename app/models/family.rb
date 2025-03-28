@@ -1,5 +1,6 @@
 class Family < ApplicationRecord
   has_many :members, dependent: :destroy
+  has_many :orders, dependent: :nullify
   has_and_belongs_to_many :whatsapp_messages
 
 

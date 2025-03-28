@@ -1,0 +1,61 @@
+<header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+  <div class="container mx-auto px-4 py-4">
+    <div class="flex justify-between items-center">
+      <!-- Logo/Nome do site -->
+      <a href="/" class="text-2xl font-serif text-[#2D3047]">
+        Giovana & Pedro
+      </a>
+
+      <!-- Menu de navegação -->
+      <nav class="hidden md:flex space-x-6">
+        <a href="/" class="text-[#2D3047] hover:text-[#73C8A9] transition">Home</a>
+        <a href="/gift-registry" class="text-[#2D3047] hover:text-[#73C8A9] transition">Lista de Presentes</a>
+        <a href="/rsvp" class="text-[#2D3047] hover:text-[#73C8A9] transition">RSVP</a>
+      </nav>
+
+      <!-- Ícones (Carrinho, etc) -->
+      <div class="flex items-center space-x-4">
+        <% if show_cart? %>
+          <a href="/gift-registry/cart" class="relative">
+            <svg class="w-6 h-6 text-[#2D3047]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+            <div id="cart-counter" style="<%= session[:cart].to_a.size > 0 ? 'display:flex' : 'display:none' %>" class="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center bg-red-600 text-white text-xs font-bold rounded-full">
+              <%= session[:cart].to_a.size %>
+            </div>
+          </a>
+        <% end %>
+
+        <!-- Menu mobile (hamburger) -->
+        <button class="md:hidden" id="mobile-menu-button">
+          <svg class="w-6 h-6 text-[#2D3047]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menu mobile (expandido) -->
+    <div class="md:hidden hidden" id="mobile-menu">
+      <div class="pt-2 pb-3 space-y-1">
+        <a href="/" class="block px-3 py-2 text-[#2D3047] hover:bg-gray-50 rounded-md">Home</a>
+        <a href="/gift-registry" class="block px-3 py-2 text-[#2D3047] hover:bg-gray-50 rounded-md">Lista de Presentes</a>
+        <a href="/rsvp" class="block px-3 py-2 text-[#2D3047] hover:bg-gray-50 rounded-md">RSVP</a>
+
+        <% if show_cart? %>
+          <a href="/gift-registry/cart" class="flex items-center px-3 py-2 text-[#2D3047] hover:bg-gray-50 rounded-md">
+            <span>Carrinho</span>
+            <% if session[:cart].to_a.size > 0 %>
+              <span class="ml-2 inline-flex items-center justify-center h-5 w-5 bg-red-600 text-white text-xs font-bold rounded-full">
+                <%= session[:cart].to_a.size %>
+              </span>
+            <% end %>
+          </a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Espaçador para compensar o header fixo -->
+<div class="h-20"></div>

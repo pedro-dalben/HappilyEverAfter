@@ -23,9 +23,6 @@ export default class extends Controller {
 	}
 
 	connect() {
-		// Certificar-se de que o form não é enviado diretamente
-		console.log('loaded')
-
 		if (this.hasFormTarget) {
 			this.formTarget.addEventListener('submit', this.handleSubmit.bind(this))
 		}

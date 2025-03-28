@@ -35,10 +35,13 @@
       <div class="space-y-6">
         <h2 class="font-serif text-4xl" style="color: var(--primary);">Nossa História</h2>
         <p class="text-lg leading-relaxed text-gray-700">
-          Pedro e Giovana se conheceram em uma noite encantadora, onde cada olhar revelou a magia de um destino traçado com carinho.
+          Giovana e Pedro se conheceram na adolescência. A amizade surgiu antes do interesse romântico, cheia de conversas e coisas em comum.
         </p>
         <p class="text-lg leading-relaxed text-gray-700">
-          Unidos por uma paixão verdadeira, eles trilham juntos um caminho repleto de sorrisos e desafios.
+          No dia 03 de Maio de 2015, ao som de Lovers on the Sun, o relacionamento começou.
+        </p>
+        <p class="text-lg leading-relaxed text-gray-700">
+          No dia 20 de Janeiro de 2022, à beira mar, o pedido de casamento foi feito. Transformando o amor adolescente em algo mais.
         </p>
       </div>
       <div class="relative h-[600px] group">
@@ -203,7 +206,7 @@
 <!-- RSVP SECTION -->
 <section class="relative py-32 bg-[#73C8A9]/20">
   <div class="container relative px-4 mx-auto text-center">
-    <div class="max-w-2xl mx-auto" data-aos="fade-up">
+    <div class="max-w-2xl mx-auto mb-16" data-aos="fade-up">
       <h2 class="mb-8 font-serif text-5xl text-[#2D3047] drop-shadow-sm">
         Confirme Sua Presença
       </h2>
@@ -231,12 +234,42 @@
                   data: { turbo_frame: "rsvp_modal" } do %>
         <span class="relative z-10">Confirme sua presença</span>
       <% end %>
-      <!-- Data decorativa -->
-      <div class="mt-16 space-y-2 text-[#2D3047]/80">
-        <p class="text-xl font-light">3 de Maio de 2025</p>
-        <div class="w-16 h-[1px] mx-auto bg-[#2D3047]/30"></div>
-        <p class="font-light">11:00</p>
-      </div>
+    </div>
+
+    <div class="max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+      <h2 class="mb-8 font-serif text-5xl text-[#2D3047] drop-shadow-sm">
+        Lista de Presentes
+      </h2>
+      <p class="mb-10 text-lg text-[#2D3047]/80">
+        Seu presente será uma contribuição valiosa para nossa nova vida a dois
+      </p>
+      <%= link_to gift_registry_path,
+                  class: "relative
+                          inline-flex
+                          items-center
+                          justify-center
+                          px-8
+                          py-4
+                          text-lg
+                          font-light
+                          tracking-wider
+                          text-white
+                          transition-all
+                          duration-300
+                          border-2
+                          border-white
+                          hover:bg-[#73C8A9]/80
+                          group
+                          bg-[#73C8A9]" do %>
+        <span class="relative z-10">Lista de Presentes</span>
+      <% end %>
+    </div>
+
+    <!-- Data decorativa -->
+    <div class="mt-16 space-y-2 text-[#2D3047]/80">
+      <p class="text-xl font-light">3 de Maio de 2025</p>
+      <div class="w-16 h-[1px] mx-auto bg-[#2D3047]/30"></div>
+      <p class="font-light">11:00</p>
     </div>
   </div>
 </section>

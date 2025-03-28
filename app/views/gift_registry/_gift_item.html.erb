@@ -1,0 +1,13 @@
+<div class="gift-item-card">
+  <!-- Conteúdo do item -->
+
+  <form action="<%= add_to_cart_path(gift_item) %>" method="post" class="mt-4">
+    <%= csrf_meta_tags %>
+    <button type="button"
+            data-item-id="<%= gift_item.id %>"
+            data-turbo="false"
+            class="add-to-cart-btn w-full px-4 py-2 bg-[#73C8A9] text-white rounded-md hover:bg-[#5db796] transition">
+      Adicionar ao carrinho
+    </button>
+  </form>
+</div>

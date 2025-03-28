@@ -1,318 +1,139 @@
-<div class="min-h-screen bg-[#73C8A9]/20 pt-16 pb-24">
-  <div class="container max-w-6xl px-4 mx-auto">
-    <h1 class="text-3xl font-serif text-[#2D3047] mb-2 text-center sm:text-left">Lista de Presentes - Família <%= @family.name %></h1>
-    <p class="mb-10 text-gray-600 text-center sm:text-left">Acompanhe os presentes que foram comprados para seu casamento</p>
-    <% if flash[:notice] && !flash[:notice].to_s.start_with?('admin_') %>
-      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">
-        <span class="block sm:inline"><%= flash[:notice] %></span>
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+  <h1 class="text-2xl font-serif text-[#2D3047] mb-6">Meus Presentes</h1>
+
+  <% if @orders.empty? %>
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <p class="text-gray-600 text-center">Você ainda não comprou nenhum presente.</p>
+      <div class="mt-4 text-center">
+        <a href="<%= gift_registry_path %>" class="inline-block px-4 py-2 bg-[#73C8A9] text-white rounded hover:bg-[#5db796] transition">
+          Ver lista de presentes
+        </a>
+      </div>
+    </div>
+  <% else %>
+    <!-- Pedidos pagos -->
+    <% if @paid_orders.any? %>
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-xl font-medium text-[#2D3047] mb-4">Presentes confirmados</h2>
+
+        <div class="space-y-4">
+          <% @paid_orders.each do |order| %>
+            <div class="border-b pb-4 last:border-b-0 last:pb-0">
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <span class="font-medium">Pedido #<%= order.id %></span>
+                  <span class="text-sm text-gray-500 ml-2"><%= order.created_at.strftime("%d/%m/%Y") %></span>
+                </div>
+                <span class="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Pago</span>
+              </div>
+
+              <div class="mt-2">
+                <% order.order_items.each do |item| %>
+                  <div class="flex justify-between text-sm py-1">
+                    <span><%= item.gift_item.name %> x<%= item.quantity %></span>
+                    <span class="text-gray-700">R$ <%= number_with_precision(item.price * item.quantity, precision: 2, delimiter: '.', separator: ',') %></span>
+                  </div>
+                <% end %>
+
+                <div class="flex justify-between font-medium mt-2 pt-2 border-t">
+                  <span>Total</span>
+                  <span>R$ <%= number_with_precision(order.total, precision: 2, delimiter: '.', separator: ',') %></span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
       </div>
     <% end %>
-    <% if flash[:alert] && !flash[:alert].to_s.start_with?('admin_') %>
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
-        <span class="block sm:inline"><%= flash[:alert] %></span>
+
+    <!-- Pedidos pendentes -->
+    <% if @pending_orders.any? %>
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-xl font-medium text-[#2D3047] mb-4">Aguardando pagamento</h2>
+
+        <div class="space-y-4">
+          <% @pending_orders.each do |order| %>
+            <div class="border-b pb-4 last:border-b-0 last:pb-0">
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <span class="font-medium">Pedido #<%= order.id %></span>
+                  <span class="text-sm text-gray-500 ml-2"><%= order.created_at.strftime("%d/%m/%Y") %></span>
+                </div>
+                <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded">Pendente</span>
+              </div>
+
+              <div class="mt-2">
+                <% order.order_items.each do |item| %>
+                  <div class="flex justify-between text-sm py-1">
+                    <span><%= item.gift_item.name %> x<%= item.quantity %></span>
+                    <span class="text-gray-700">R$ <%= number_with_precision(item.price * item.quantity, precision: 2, delimiter: '.', separator: ',') %></span>
+                  </div>
+                <% end %>
+
+                <div class="flex justify-between font-medium mt-2 pt-2 border-t">
+                  <span>Total</span>
+                  <span>R$ <%= number_with_precision(order.total, precision: 2, delimiter: '.', separator: ',') %></span>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <a href="<%= order.payment_url %>" target="_blank" class="inline-block w-full text-center px-4 py-2 bg-[#73C8A9] text-white rounded hover:bg-[#5db796] transition">
+                  Finalizar pagamento
+                </a>
+              </div>
+            </div>
+          <% end %>
+        </div>
       </div>
     <% end %>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
-      <!-- Estatísticas -->
-      <div class="p-6 bg-white rounded-lg shadow-lg">
-        <h2 class="text-xl font-serif text-[#2D3047] mb-6 pb-2 border-b text-center sm:text-left">Estatísticas de Presentes</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="p-4 text-center bg-blue-50 rounded-lg">
-            <div class="text-3xl font-bold text-blue-600"><%= @paid_orders.count %></div>
-            <div class="text-sm text-gray-600">Presentes Recebidos</div>
-          </div>
-          <div class="p-4 text-center bg-yellow-50 rounded-lg">
-            <div class="text-3xl font-bold text-yellow-600"><%= @pending_orders.count %></div>
-            <div class="text-sm text-gray-600">Aguardando Pagamento</div>
-          </div>
-          <div class="p-4 text-center bg-green-50 rounded-lg">
-            <div class="text-3xl font-bold text-green-600">R$ <%= number_with_precision(@paid_orders.sum(:total), precision: 2, separator: ',') %></div>
-            <div class="text-sm text-gray-600">Valor Total Recebido</div>
-          </div>
-        </div>
-      </div>
-      <!-- Gráfico ou informações adicionais -->
-      <div class="p-6 bg-white rounded-lg shadow-lg">
-        <h2 class="text-xl font-serif text-[#2D3047] mb-6 pb-2 border-b">Itens Mais Comprados</h2>
-        <% if @paid_orders.any? %>
-          <div class="space-y-4">
-            <% # Agrupar os itens comprados e pegar os 5 mais comprados
-               items_count = {}
-               @paid_orders.each do |order|
-                 order.order_items.each do |item|
-                   gift_item = item.gift_item
-                   items_count[gift_item.id] ||= { name: gift_item.name, count: 0 }
-                   items_count[gift_item.id][:count] += item.quantity
-                 end
-               end
 
-               top_items = items_count.values.sort_by { |i| -i[:count] }.take(5)
-
-               top_items.each do |item| %>
-              <div class="flex items-center justify-between">
-                <span class="text-gray-800"><%= item[:name] %></span>
-                <span class="font-medium"><%= item[:count] %> unid.</span>
-              </div>
-            <% end %>
-          </div>
-        <% else %>
-          <div class="text-center text-gray-500 py-4">
-            Nenhum presente confirmado ainda.
-          </div>
-        <% end %>
-      </div>
-    </div>
-    <!-- Seção de Presentes Confirmados -->
-    <div class="mb-10">
-      <h2 class="text-2xl font-serif text-[#2D3047] mb-4 text-center sm:text-left">Presentes Confirmados</h2>
-      <% if @paid_orders.any? %>
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-          <!-- Versão para dispositivos móveis -->
-          <div class="block sm:hidden">
-            <% @paid_orders.each do |order| %>
-              <div class="border-b border-gray-200 p-4">
-                <div class="mb-2">
-                  <span class="font-medium">Data:</span>
-                  <%= order.paid_at&.strftime("%d/%m/%Y") || order.updated_at.strftime("%d/%m/%Y") %>
-                </div>
-                <div class="mb-2">
-                  <div class="font-medium"><%= order.customer_name %></div>
-                  <div class="text-sm text-gray-500"><%= order.customer_email %></div>
-                </div>
-                <div class="mb-2">
-                  <span class="font-medium">Itens:</span>
-                  <% order.order_items.each do |item| %>
-                    <div class="pl-2 text-sm">
-                      <%= item.quantity %>x <%= item.gift_item.name %>
-                    </div>
-                  <% end %>
-                </div>
-                <div class="font-medium">
-                  <span>Valor:</span>
-                  R$ <%= number_with_precision(order.total, precision: 2, separator: ',') %>
-                </div>
-              </div>
-            <% end %>
-          </div>
-
-          <!-- Versão para desktop -->
-          <div class="hidden sm:block overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Itens</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <% @paid_orders.each do |order| %>
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <%= order.paid_at&.strftime("%d/%m/%Y") || order.updated_at.strftime("%d/%m/%Y") %>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm font-medium text-gray-900"><%= order.customer_name %></div>
-                      <div class="text-sm text-gray-500"><%= order.customer_email %></div>
-                    </td>
-                    <td class="px-6 py-4">
-                      <div class="text-sm text-gray-900">
-                        <% order.order_items.each do |item| %>
-                          <div>
-                            <span><%= item.quantity %>x</span>
-                            <span><%= item.gift_item.name %></span>
-                          </div>
-                        <% end %>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      R$ <%= number_with_precision(order.total, precision: 2, separator: ',') %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      <% else %>
-        <div class="p-8 text-center bg-white rounded-lg shadow-lg">
-          <p class="text-gray-600">Nenhum presente confirmado ainda.</p>
-        </div>
-      <% end %>
-    </div>
-    <!-- Seção de Pagamentos Pendentes -->
-    <div class="mb-10">
-      <h2 class="text-2xl font-serif text-[#2D3047] mb-4 text-center sm:text-left">Pagamentos Pendentes</h2>
-      <% if @pending_orders.any? %>
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-          <!-- Versão para dispositivos móveis -->
-          <div class="block sm:hidden">
-            <% @pending_orders.each do |order| %>
-              <div class="border-b border-gray-200 p-4">
-                <div class="mb-2">
-                  <span class="font-medium">Data:</span>
-                  <%= order.created_at.strftime("%d/%m/%Y") %>
-                </div>
-                <div class="mb-2">
-                  <div class="font-medium"><%= order.customer_name %></div>
-                  <div class="text-sm text-gray-500"><%= order.customer_email %></div>
-                </div>
-                <div class="mb-2">
-                  <span class="font-medium">Itens:</span>
-                  <% order.order_items.each do |item| %>
-                    <div class="pl-2 text-sm">
-                      <%= item.quantity %>x <%= item.gift_item.name %>
-                    </div>
-                  <% end %>
-                </div>
-                <div class="mb-2 font-medium">
-                  <span>Valor:</span>
-                  R$ <%= number_with_precision(order.total, precision: 2, separator: ',') %>
-                </div>
-                <div class="mt-3">
-                  <% if order.payment_url.present? %>
-                    <a href="<%= order.payment_url %>" target="_blank" class="inline-flex items-center px-3 py-1 text-sm bg-[#73C8A9] text-white rounded hover:bg-[#73C8A9]/90">
-                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                      </svg>
-                      Ir para Pagamento
-                    </a>
-                  <% else %>
-                    <span class="text-gray-500">Link indisponível</span>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-          </div>
-
-          <!-- Versão para desktop -->
-          <div class="hidden sm:block overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Itens</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <% @pending_orders.each do |order| %>
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <%= order.created_at.strftime("%d/%m/%Y") %>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm font-medium text-gray-900"><%= order.customer_name %></div>
-                      <div class="text-sm text-gray-500"><%= order.customer_email %></div>
-                    </td>
-                    <td class="px-6 py-4">
-                      <div class="text-sm text-gray-900">
-                        <% order.order_items.each do |item| %>
-                          <div>
-                            <span><%= item.quantity %>x</span>
-                            <span><%= item.gift_item.name %></span>
-                          </div>
-                        <% end %>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      R$ <%= number_with_precision(order.total, precision: 2, separator: ',') %>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      <% if order.payment_url.present? %>
-                        <a href="<%= order.payment_url %>" target="_blank" class="inline-flex items-center px-3 py-1 text-sm bg-[#73C8A9] text-white rounded hover:bg-[#73C8A9]/90">
-                          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                          </svg>
-                          Ir para Pagamento
-                        </a>
-                      <% else %>
-                        <span class="text-gray-500">Link indisponível</span>
-                      <% end %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      <% else %>
-        <div class="p-8 text-center bg-white rounded-lg shadow-lg">
-          <p class="text-gray-600">Não há pagamentos pendentes.</p>
-        </div>
-      <% end %>
-    </div>
-    <!-- Outros status de pedidos (cancelados, vencidos, etc) -->
+    <!-- Outros pedidos -->
     <% if @other_orders.any? %>
-      <div class="mb-10">
-        <h2 class="text-2xl font-serif text-[#2D3047] mb-4">Outros Pedidos</h2>
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Itens</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <% @other_orders.each do |order| %>
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <%= order.created_at.strftime("%d/%m/%Y") %>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm font-medium text-gray-900"><%= order.customer_name %></div>
-                      <div class="text-sm text-gray-500"><%= order.customer_email %></div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <% status_class = {
-                        "overdue" => "bg-orange-100 text-orange-800",
-                        "refunded" => "bg-purple-100 text-purple-800",
-                        "cancelled" => "bg-gray-100 text-gray-800",
-                        "failed" => "bg-red-100 text-red-800"
-                      } %>
-                      <% status_text = {
-                        "overdue" => "Vencido",
-                        "refunded" => "Reembolsado",
-                        "cancelled" => "Cancelado",
-                        "failed" => "Falhou"
-                      } %>
-                      <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full <%= status_class[order.status] || 'bg-gray-100 text-gray-800' %>">
-                        <%= status_text[order.status] || order.status.humanize %>
-                      </span>
-                    </td>
-                    <td class="px-6 py-4">
-                      <div class="text-sm text-gray-900">
-                        <% order.order_items.each do |item| %>
-                          <div>
-                            <span><%= item.quantity %>x</span>
-                            <span><%= item.gift_item.name %></span>
-                          </div>
-                        <% end %>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      R$ <%= number_with_precision(order.total, precision: 2, separator: ',') %>
-                    </td>
-                  </tr>
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-medium text-[#2D3047] mb-4">Outros pedidos</h2>
+
+        <div class="space-y-4">
+          <% @other_orders.each do |order| %>
+            <div class="border-b pb-4 last:border-b-0 last:pb-0">
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <span class="font-medium">Pedido #<%= order.id %></span>
+                  <span class="text-sm text-gray-500 ml-2"><%= order.created_at.strftime("%d/%m/%Y") %></span>
+                </div>
+                <% status_badge_class = case order.status
+                   when "overdue" then "bg-red-100 text-red-800"
+                   when "cancelled" then "bg-gray-100 text-gray-800"
+                   when "refunded" then "bg-purple-100 text-purple-800"
+                   else "bg-gray-100 text-gray-800"
+                   end %>
+                <span class="inline-block px-2 py-1 <%= status_badge_class %> text-xs rounded">
+                  <%= { "overdue" => "Vencido", "cancelled" => "Cancelado", "refunded" => "Reembolsado" }[order.status] || order.status.humanize %>
+                </span>
+              </div>
+
+              <div class="mt-2">
+                <% order.order_items.each do |item| %>
+                  <div class="flex justify-between text-sm py-1">
+                    <span><%= item.gift_item.name %> x<%= item.quantity %></span>
+                    <span class="text-gray-700">R$ <%= number_with_precision(item.price * item.quantity, precision: 2, delimiter: '.', separator: ',') %></span>
+                  </div>
                 <% end %>
-              </tbody>
-            </table>
-          </div>
+
+                <div class="flex justify-between font-medium mt-2 pt-2 border-t">
+                  <span>Total</span>
+                  <span>R$ <%= number_with_precision(order.total, precision: 2, delimiter: '.', separator: ',') %></span>
+                </div>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
     <% end %>
-    <div class="mt-8 text-center">
-      <a href="<%= root_path %>" class="inline-block px-4 py-2 bg-[#2D3047] text-white rounded hover:bg-[#2D3047]/90">
-        Voltar ao início
-      </a>
-    </div>
+  <% end %>
+
+  <div class="mt-6 text-center">
+    <a href="<%= gift_registry_path %>" class="inline-block px-4 py-2 border border-[#73C8A9] text-[#73C8A9] rounded hover:bg-[#f8f9fa] transition">
+      Voltar para lista de presentes
+    </a>
   </div>
 </div>
