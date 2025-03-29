@@ -17,12 +17,96 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <!-- JavaScript -->
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <!-- Adicione um CSS específico para admin se necessário -->
+    <%= stylesheet_link_tag asset_path('admin-1a517c4e.scss'), media: 'all' rescue nil %>
+    <style>
+      /* Estilos básicos para o admin até resolver o problema do CSS */
+      .sidebar {
+        width: 250px;
+        background-color: #2c3e50;
+        color: white;
+      }
+
+      .main-content {
+        flex: 1;
+      }
+
+      /* Expandindo os estilos inline como backup */
+      .admin-card {
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .card-title {
+        margin-top: 0;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ecf0f1;
+      }
+
+      .btn-primary {
+        background-color: #3498db;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-danger {
+        background-color: #e74c3c;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .admin-table th,
+      .admin-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      .admin-table thead th {
+        border-bottom: 2px solid #dee2e6;
+        background-color: #f8f9fa;
+      }
+
+      @media (max-width: 767.98px) {
+        .mobile-menu-toggle {
+          display: block;
+        }
+      }
+    </style>
   </head>
   <body class="min-h-screen bg-gray-100">
     <div class="flex h-screen">
+      <button id="mobile-menu-button" class="fixed z-50 p-2 bg-blue-500 rounded-md shadow-lg text-white top-4 left-4 md:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
       <% if user_signed_in? %>
         <!-- SIDEBAR -->
-        <aside class="flex flex-col w-64 bg-white border-r border-gray-200">
+        <aside id="sidebar" class="flex flex-col w-64 bg-white border-r border-gray-200 fixed md:static inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition duration-200 ease-in-out z-30">
           <div class="p-4 border-b border-gray-200">
             <h1 class="text-2xl font-bold text-gray-800">
               <a href="<%= root_path %>">MyWedding</a>
@@ -30,10 +114,21 @@
           </div>
           <nav class="flex-1 p-4 space-y-2">
             <%= link_to "Dashboard", root_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
-            <%= link_to "Families", families_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
-            <%= link_to "Gift Items", gift_items_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
-            <!-- NEW USER LINK -->
-            <%= link_to "Create New User", new_admin_user_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
+            <%= link_to "Famílias", families_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
+            <%= link_to "Mensagens WhatsApp", whatsapp_messages_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
+            <%= link_to gift_items_path, class: "group flex items-center px-3 py-2 text-sm font-medium rounded-md #{current_page?(gift_items_path) ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}" do %>
+              <svg class="mr-3 flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4M12 4v16m8-8H4" />
+              </svg>
+              Itens de Presente
+            <% end %>
+            <%= link_to admin_gifts_path, class: "group flex items-center px-3 py-2 text-sm font-medium rounded-md #{current_page?(admin_gifts_path) ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}" do %>
+              <svg class="mr-3 flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              Presentes Comprados
+            <% end %>
+            <%= link_to "Criar Novo Usuário", new_admin_user_path, class: "block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium" %>
           </nav>
           <div class="p-4 border-t border-gray-200">
             <div class="mb-2 text-sm text-gray-600">
@@ -72,5 +167,35 @@
         </main>
       </div>
     </div>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden"></div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const sidebarMenu = document.getElementById('sidebar');
+        const menuButton = document.getElementById('mobile-menu-button');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        if (menuButton && sidebarMenu && overlay) {
+          menuButton.addEventListener('click', function() {
+            sidebarMenu.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+          });
+
+          overlay.addEventListener('click', function() {
+            sidebarMenu.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+          });
+
+          const menuLinks = sidebarMenu.querySelectorAll('a');
+          menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+              if (window.innerWidth < 768) {
+                sidebarMenu.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+              }
+            });
+          });
+        }
+      });
+    </script>
   </body>
 </html>

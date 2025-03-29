@@ -6,6 +6,31 @@ class Family < ApplicationRecord
 
   before_create :generate_token
 
+  def confirmed_members_count
+    members.where(confirmed: true).count
+  end
+
+  def total_members_count
+    members.count
+  end
+
+  def confirmation_rate
+    total = total_members_count
+    return 0 if total == 0
+    (confirmed_members_count.to_f / total * 100).round(1)
+  end
+
+  def confirmation_status
+    rate = confirmation_rate
+    if rate == 0
+      :none
+    elsif rate < 100
+      :partial
+    else
+      :complete
+    end
+  end
+
   private
 
   def generate_token

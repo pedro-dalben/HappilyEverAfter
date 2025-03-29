@@ -1,24 +1,88 @@
 <div class="max-w-lg p-6 bg-white rounded shadow">
-  <%= simple_form_for @gift_item do |f| %>
-    <div class="mb-4">
-      <%= f.label :name, class: "block text-gray-700 font-medium mb-1" %>
-      <%= f.input :name, label: false, input_html: { class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" } %>
+  <%= form_with(model: gift_item, local: true, class: "space-y-6") do |form| %>
+    <% if gift_item.errors.any? %>
+      <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <h3 class="text-sm font-medium text-red-800">
+              <%= pluralize(gift_item.errors.count, "erro") %> impediram este item de ser salvo:
+            </h3>
+            <div class="mt-2 text-sm text-red-700">
+              <ul class="list-disc pl-5 space-y-1">
+                <% gift_item.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <div class="mb-4">
+          <%= form.label :name, "Nome", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.text_field :name, class: "shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+        </div>
+
+        <div class="mb-4">
+          <%= form.label :price, "Preço (R$)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.number_field :price, step: 0.01, min: 0, class: "shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+        </div>
+
+        <div class="mb-4">
+          <%= form.label :description, "Descrição", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.text_area :description, rows: 5, class: "shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+        </div>
+
+        <div class="mb-4">
+          <div class="flex items-center">
+            <%= form.check_box :disabled, class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" %>
+            <%= form.label :disabled, "Item inativo", class: "ml-2 block text-sm text-gray-900" %>
+          </div>
+          <p class="mt-1 text-xs text-gray-500">Itens inativos não aparecem para os convidados.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="mb-4">
+          <%= form.label :image, "Imagem", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+            <div class="space-y-1 text-center">
+              <% if gift_item.image.attached? %>
+                <%= image_tag gift_item.image.variant(resize_to_limit: [300, 300]), class: "mx-auto h-32 w-auto" %>
+                <p class="text-xs text-gray-500 mt-2">
+                  Clique para alterar a imagem
+                </p>
+              <% else %>
+                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <p class="text-xs text-gray-500 mt-2">
+                  PNG, JPG, GIF até 5MB
+                </p>
+              <% end %>
+              <div class="flex text-sm text-gray-600">
+                <label for="gift_item_image" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                  <span>Fazer upload</span>
+                  <%= form.file_field :image, class: "sr-only", id: "gift_item_image" %>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="mb-4">
-      <%= f.label :price, class: "block text-gray-700 font-medium mb-1" %>
-      <%= f.input :price, label: false, input_html: { class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500", step: "0.01" } %>
-    </div>
-    <div class="mb-4">
-      <%= f.label :image, class: "block text-gray-700 font-medium mb-1" %>
-      <%= f.input :image, as: :file, label: false, input_html: { class: "w-full border border-gray-300 rounded py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" } %>
-    </div>
-    <div class="mb-4 flex items-center">
-      <%= f.check_box :disabled, class: "form-checkbox h-5 w-5 text-blue-600 mr-2" %>
-      <%= f.label :disabled, "Desabilitar este item?", class: "text-gray-700" %>
-    </div>
-    <div class="flex space-x-2">
-      <%= f.button :submit, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
-      <%= link_to "Cancel", gift_items_path, class: "bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" %>
+
+    <div class="flex justify-end space-x-3">
+      <%= link_to "Cancelar", gift_items_path, class: "inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+      <%= form.submit gift_item.new_record? ? "Criar Item" : "Atualizar Item", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
     </div>
   <% end %>
 </div>

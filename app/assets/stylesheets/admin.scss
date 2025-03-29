@@ -1,0 +1,214 @@
+// Estilos para o painel administrativo
+
+// Variáveis
+$sidebar-width: 250px;
+$primary-color: #3498db;
+$secondary-color: #2c3e50;
+$success-color: #2ecc71;
+$danger-color: #e74c3c;
+$light-color: #ecf0f1;
+$dark-color: #34495e;
+$sidebar-bg: $secondary-color;
+$text-light: #ffffff;
+
+// Layout principal
+.admin-layout {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+}
+
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+// Sidebar
+.sidebar {
+  width: $sidebar-width;
+  background-color: $sidebar-bg;
+  color: $text-light;
+  transition: all 0.3s ease;
+
+  .sidebar-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+  }
+
+  .sidebar-content {
+    padding: 15px 0;
+  }
+
+  .nav-link {
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+
+    i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: $text-light;
+    }
+
+    &.active {
+      background-color: $primary-color;
+      color: $text-light;
+    }
+  }
+}
+
+// Conteúdo principal
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  .header {
+    background-color: $text-light;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    .user-info {
+      text-align: right;
+
+      small {
+        display: block;
+        color: #777;
+      }
+    }
+  }
+
+  .content-wrapper {
+    padding: 20px;
+    flex: 1;
+  }
+}
+
+// Cards e elementos de UI
+.admin-card {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-bottom: 20px;
+
+  .card-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $light-color;
+  }
+}
+
+.stat-card {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+
+  .stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: $primary-color;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-right: 15px;
+  }
+
+  .stat-content {
+    h3 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    p {
+      margin: 5px 0 0;
+      color: #777;
+    }
+  }
+
+  &.stat-success .stat-icon {
+    background-color: $success-color;
+  }
+
+  &.stat-danger .stat-icon {
+    background-color: $danger-color;
+  }
+}
+
+// Tabelas
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  background-color: transparent;
+
+  th, td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
+  }
+
+  thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+    background-color: #f8f9fa;
+    color: #495057;
+  }
+
+  tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}
+
+// Responsividade para dispositivos móveis
+@media (max-width: 767.98px) {
+  .sidebar {
+    position: fixed;
+    left: -$sidebar-width;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+
+    &.active {
+      left: 0;
+      box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .mobile-menu-toggle {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

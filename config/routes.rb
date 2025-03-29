@@ -2,7 +2,31 @@ require "sidekiq/web"
 
 Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: "users/sessions" }, skip: [ :registrations ]
-  mount Sidekiq::Web => "/sidekiq"
+
+  # Área Administrativa Unificada
+  namespace :admin do
+    # Dashboard administrativo
+    root to: "dashboard#index"
+
+    # Usuários admin
+    resources :users, only: [ :new, :create, :index ]
+
+    # Gerenciamento de presentes no admin
+    resources :gifts, only: [:index, :show, :edit, :update] do
+      patch :update_status, on: :member
+    end
+
+    # Gerenciamento de famílias no admin
+    resources :families
+
+    # Relatórios e estatísticas
+    get "reports", to: "reports#index"
+
+    # Montagem do Sidekiq dentro do namespace admin
+    authenticate :user, lambda { |u| u.admin? } do
+      mount Sidekiq::Web => "/sidekiq"
+    end
+  end
 
   root "home#index"
 
@@ -11,10 +35,10 @@ Rails.application.routes.draw do
   resources :families do
     resources :members, except: [ :show ]
   end
-  resources :gift_items
-
-  namespace :admin do
-    resources :users, only: [ :new, :create ]
+  resources :gift_items do
+    member do
+      post :toggle_status
+    end
   end
 
   get "rsvp", to: "rsvp#index"
@@ -46,4 +70,9 @@ Rails.application.routes.draw do
   get "gift-registry/thank-you/:id", to: "gift_registry#thank_you", as: :thank_you
   get "gift-registry/payment-transition/:id", to: "gift_registry#payment_transition", as: "payment_transition"
   get "gift-registry/family-purchases/:token", to: "gift_registry#family_purchases", as: :family_purchases
+
+  # Removido e migrado para o namespace admin
+  # resources :admin_gifts, only: [:index, :show] do
+  #   patch :update_status, on: :member
+  # end
 end
