@@ -87,7 +87,7 @@ end
 # Timezone data for Windows and JRuby
 gem "tzinfo-data", platforms: %i[windows jruby]
 
-gem "httparty", "~> 0.22.0"
+gem "httparty", "~> 0.23.1"
 gem "foreman", "~> 0.88.1"
 
 gem "faraday", "~> 2.12"
