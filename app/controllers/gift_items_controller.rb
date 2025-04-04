@@ -59,6 +59,6 @@ class GiftItemsController < AdminController
   end
 
   def gift_item_params
-    params.require(:gift_item).permit(:name, :description, :price, :image, :disabled)
+    params.require(:gift_item).permit(:name, :price, :image, :disabled)
   end
 end

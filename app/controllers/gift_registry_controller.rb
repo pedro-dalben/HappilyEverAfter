@@ -368,7 +368,7 @@ class GiftRegistryController < ApplicationController
   def authenticate
     # Se já tiver um token válido na sessão, redireciona para a lista
     if session[:family_token].present?
-      family = Family.find_by(token: session[:family_token])
+      family = Family.find_by(token: session[:family_token].upcase)
       if family.present?
         redirect_to gift_registry_path and return
       else
@@ -385,10 +385,10 @@ class GiftRegistryController < ApplicationController
     token = params[:token]
 
     if token.present?
-      family = Family.find_by(token: token)
+      family = Family.find_by(token: token.upcase)
 
       if family
-        session[:family_token] = token
+        session[:family_token] = token.upcase
         flash[:notice] = "Bem-vindo à lista de presentes do casamento!"
         redirect_to gift_registry_path
       else
@@ -403,7 +403,7 @@ class GiftRegistryController < ApplicationController
 
   def family_purchases
     token = params[:token]
-    @family = Family.find_by(token: token)
+    @family = Family.find_by(token: token.upcase)
 
     if @family.nil?
       flash[:alert] = "Token de família inválido"
@@ -509,10 +509,10 @@ class GiftRegistryController < ApplicationController
     token = params[:token] || session[:family_token]
 
     if token.present?
-      @family = Family.find_by(token: token)
+      @family = Family.find_by(token: token.upcase)
       if @family
         # Salvar o token na sessão para futuras requisições
-        session[:family_token] = token
+        session[:family_token] = token.upcase
         return true
       end
     end
