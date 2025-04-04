@@ -238,6 +238,9 @@ class GiftRegistryController < ApplicationController
   def payment_webhook
     # Log da requisição para debug
     Rails.logger.info("Recebido webhook do Asaas: #{request.raw_post}")
+    Rails.logger.info("User-Agent: #{request.user_agent}")
+    Rails.logger.info("IP Remoto: #{request.remote_ip}")
+    Rails.logger.info("Cabeçalhos: #{request.headers.select { |k, v| k =~ /^HTTP_/ }.inspect}")
 
     # Parse do payload (com tratamento de erro)
     begin
@@ -247,17 +250,29 @@ class GiftRegistryController < ApplicationController
       return render json: { error: "Invalid JSON" }, status: :bad_request
     end
 
-    # Verificar se temos um evento e ID de pagamento
+    # Verificar se temos um evento e ID de evento
     event = payload["event"]
-    payment_id = payload["payment"]["id"] if payload["payment"]
+    event_id = payload["id"]
 
     unless event
       Rails.logger.error("Webhook sem evento: #{payload}")
       return render json: { error: "Missing event" }, status: :bad_request
     end
 
+    # Verificar se o evento já foi processado
+    if event_id.present?
+      if ProcessedWebhook.exists?(event_id: event_id)
+        Rails.logger.info("Evento #{event_id} já foi processado anteriormente")
+        return render json: { success: true, message: "Event already processed" }, status: :ok
+      end
+    end
+
+    payment_id = payload["payment"]["id"] if payload["payment"]
+
     # Eventos que não precisam de pedido para processar
     if event == "PAYMENT_CHECKOUT_VIEWED"
+      # Registrar que processamos este evento
+      ProcessedWebhook.create(event_id: event_id, payload: payload.to_json) if event_id.present?
       Rails.logger.info("Cliente visualizou a página de checkout para pagamento #{payment_id}")
       return render json: { success: true }, status: :ok
     end
@@ -278,6 +293,11 @@ class GiftRegistryController < ApplicationController
 
     # Processar o evento
     case event
+    when "PAYMENT_CREATED"
+      order.update(
+        payment_data: payload.to_json
+      )
+      Rails.logger.info("Pagamento #{payment_id} criado para pedido #{order.id}")
     when "PAYMENT_RECEIVED", "PAYMENT_CONFIRMED", "PAYMENT_APPROVED"
       order.update(
         status: "paid",
@@ -297,6 +317,9 @@ class GiftRegistryController < ApplicationController
     else
       Rails.logger.info("Evento não processado: #{event} para pagamento #{payment_id}")
     end
+
+    # Registrar que processamos este evento
+    ProcessedWebhook.create(event_id: event_id, payload: payload.to_json) if event_id.present?
 
     # Retornar sucesso
     render json: { success: true }, status: :ok
