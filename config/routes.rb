@@ -30,9 +30,7 @@ Rails.application.routes.draw do
 
   # API endpoints
   namespace :api do
-    namespace :webhooks do
-      post "asaas", to: "webhooks#asaas"
-    end
+    post "webhooks/asaas", to: "webhooks#asaas"
   end
 
   root "home#index"
