@@ -6,8 +6,7 @@ module Api
       gift_registry_controller.request = request
       gift_registry_controller.response = response
 
-      # Chamar o método payment_webhook
-      gift_registry_controller.payment_webhook
+      return gift_registry_controller.payment_webhook
     end
   end
 end
