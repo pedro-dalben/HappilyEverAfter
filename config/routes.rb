@@ -28,6 +28,13 @@ Rails.application.routes.draw do
     end
   end
 
+  # API endpoints
+  namespace :api do
+    namespace :webhooks do
+      post "asaas", to: "webhooks#asaas"
+    end
+  end
+
   root "home#index"
 
   resources :whatsapp_messages, only: [ :new, :create, :index, :show ]

@@ -47,6 +47,7 @@ class WhatsappMessageService
     return content unless family.present?
     # Substitui a tag {familia_nome} pelo nome da família
     interpolated = content.to_s.gsub("{familia_nome}", family.name.to_s)
+    interpolated = interpolated.to_s.gsub("{familia_codigo}", family.token.to_s)
 
     interpolated
   end
