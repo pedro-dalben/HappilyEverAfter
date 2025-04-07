@@ -1,6 +1,6 @@
 module Admin
   class GiftsController < AdminController
-    before_action :set_gift, only: [:show, :edit, :update, :update_status]
+    before_action :set_gift, only: [:edit, :update, :update_status]
 
     def index
       @orders = Order.includes(:family, :order_items => :gift_item).order(created_at: :desc)
@@ -19,7 +19,27 @@ module Admin
     end
 
     def show
+      # Buscar todos os itens de pedidos pagos
+      @gift_summary = OrderItem.joins(:order, :gift_item)
+                              .where(orders: { status: "paid" })
+                              .group("gift_items.id, gift_items.name")
+                              .select("gift_items.id, gift_items.name,
+                                       SUM(order_items.quantity) as total_quantity,
+                                       COUNT(DISTINCT orders.id) as total_orders")
+                              .order("total_quantity DESC")
+
+      # Total de itens vendidos
+      @total_items_sold = OrderItem.joins(:order)
+                                  .where(orders: { status: "paid" })
+                                  .sum(:quantity)
+
+      # Valor total vendido
+      @total_value = Order.where(status: "paid").sum(:total)
+    end
+
+    def show_order
       @order = Order.includes(:family, :order_items => :gift_item).find(params[:id])
+      render :show_order
     end
 
     def edit

@@ -1,0 +1,61 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-6">
+    <%= link_to admin_gifts_path, class: "text-blue-600 hover:text-blue-800 flex items-center" do %>
+      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      Voltar para lista de pedidos
+    <% end %>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+    <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+      <h1 class="text-2xl font-bold text-gray-800">Resumo de Presentes Comprados</h1>
+    </div>
+
+    <div class="p-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-blue-50 p-4 rounded-lg">
+          <p class="text-sm text-blue-600">Total de Presentes Vendidos</p>
+          <p class="text-2xl font-bold text-blue-800"><%= @total_items_sold %></p>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg">
+          <p class="text-sm text-green-600">Valor Total Vendido</p>
+          <p class="text-2xl font-bold text-green-800">R$ <%= number_with_precision(@total_value, precision: 2, delimiter: '.', separator: ',') %></p>
+        </div>
+        <div class="bg-purple-50 p-4 rounded-lg">
+          <p class="text-sm text-purple-600">Total de Tipos de Presentes</p>
+          <p class="text-2xl font-bold text-purple-800"><%= @gift_summary.count %></p>
+        </div>
+      </div>
+
+      <h2 class="text-lg font-semibold mb-4 text-gray-700">Todos os Presentes Comprados</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Presente</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantidade Total</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pedidos</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @gift_summary.each do |item| %>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900"><%= item.name %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900"><%= item.total_quantity %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900"><%= item.total_orders %></div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

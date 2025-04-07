@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     # Gerenciamento de presentes no admin
     resources :gifts, only: [:index, :show, :edit, :update] do
       patch :update_status, on: :member
+      get :show_order
     end
 
     # Gerenciamento de famílias no admin
