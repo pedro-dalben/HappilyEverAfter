@@ -1,9 +1,9 @@
 module Admin
   class GiftsController < AdminController
-    before_action :set_gift, only: [:edit, :update, :update_status]
+    before_action :set_gift, only: [ :edit, :update, :update_status ]
 
     def index
-      @orders = Order.includes(:family, :order_items => :gift_item).order(created_at: :desc)
+      @orders = Order.includes(:family, order_items: :gift_item).order(created_at: :desc)
 
       # Filtrar por status, se especificado
       if params[:status].present?
@@ -38,7 +38,7 @@ module Admin
     end
 
     def show_order
-      @order = Order.includes(:family, :order_items => :gift_item).find(params[:id])
+      @order = Order.includes(:family, order_items: :gift_item).find(params[:id])
       render :show_order
     end
 

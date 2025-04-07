@@ -12,9 +12,12 @@ Rails.application.routes.draw do
     resources :users, only: [ :new, :create, :index ]
 
     # Gerenciamento de presentes no admin
-    resources :gifts, only: [:index, :show, :edit, :update] do
-      patch :update_status, on: :member
-      get :show_order
+    resources :gifts, only: [ :index, :show, :edit, :update ] do
+      member do
+        get :show_order
+        patch :update_status
+        get :show
+      end
     end
 
     # Gerenciamento de famílias no admin

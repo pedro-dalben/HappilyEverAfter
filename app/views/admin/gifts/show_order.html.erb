@@ -18,14 +18,49 @@
       </div>
     </div>
 
-    <!-- Informações do pedido (mesmo conteúdo da view anterior) -->
+    <!-- Informações do pedido -->
     <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- ... mesmo conteúdo da view anterior ... -->
+      <div>
+        <p><strong>Família:</strong> <%= @order.family.present? ? @order.family.name : "Sem família" %></p>
+        <p><strong>Data:</strong> <%= l(@order.created_at, format: :short) %></p>
+      </div>
+      <div class="text-right">
+        <p><strong>Total do Pedido:</strong></p>
+        <p class="text-2xl font-bold">R$ <%= number_with_precision(@order.total, precision: 2) %></p>
+      </div>
     </div>
 
-    <!-- Itens do pedido (mesmo conteúdo da view anterior) -->
+    <!-- Itens do pedido -->
     <div class="px-6 py-4 border-t border-gray-200">
-      <!-- ... mesmo conteúdo da view anterior ... -->
+      <h2 class="text-xl font-semibold mb-4">Itens do Pedido</h2>
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Presente</th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Quantidade</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Preço</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @order.order_items.each do |item| %>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <%= item.gift_item.name %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                <%= item.quantity %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                R$ <%= number_with_precision(item.price, precision: 2) %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                R$ <%= number_with_precision(item.subtotal, precision: 2) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
