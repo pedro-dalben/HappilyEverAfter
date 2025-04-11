@@ -444,6 +444,18 @@ class GiftRegistryController < ApplicationController
     @other_orders = @orders.where.not(status: ["paid", "pending"])
   end
 
+  def direct_access
+    @family = Family.find_by(token: params[:token].upcase)
+
+    if @family
+      session[:family_token] = @family.token
+      redirect_to gift_registry_path
+    else
+      flash[:error] = "Código de família inválido. Entre em contato via WhatsApp para obter ajuda."
+      redirect_to gift_registry_authenticate_path
+    end
+  end
+
   private
 
   def order_params

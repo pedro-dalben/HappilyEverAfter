@@ -79,6 +79,7 @@ Rails.application.routes.draw do
   get "gift-registry/thank-you/:id", to: "gift_registry#thank_you", as: :thank_you
   get "gift-registry/payment-transition/:id", to: "gift_registry#payment_transition", as: "payment_transition"
   get "gift-registry/family-purchases/:token", to: "gift_registry#family_purchases", as: :family_purchases
+  get "presentes/:token", to: "gift_registry#direct_access", as: :gift_registry_direct
 
   # Removido e migrado para o namespace admin
   # resources :admin_gifts, only: [:index, :show] do
