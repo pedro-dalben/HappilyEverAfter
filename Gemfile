@@ -90,7 +90,7 @@ gem "tzinfo-data", platforms: %i[windows jruby]
 gem "httparty", "~> 0.23.1"
 gem "foreman", "~> 0.88.1"
 
-gem "faraday", "~> 2.12"
+gem "faraday", "~> 2.13"
 
 gem "prawn"
 gem "prawn-table"
