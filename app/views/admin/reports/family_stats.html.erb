@@ -1,0 +1,132 @@
+<div class="container px-4 py-8 mx-auto">
+  <h1 class="text-2xl font-bold mb-6 text-center text-[#2D3047]">Estatísticas de Confirmações de Famílias</h1>
+  <div class="flex justify-end mb-4">
+    <%= link_to admin_family_stats_path(format: :pdf), class: "px-4 py-2 bg-[#73C8A9] text-white font-medium rounded-md hover:bg-[#73C8A9]/90 transition-colors flex items-center" do %>
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+      </svg>
+      Baixar PDF Completo
+    <% end %>
+  </div>
+  <!-- Cálculo das estatísticas -->
+  <% total_families = @families.count %>
+  <% total_families_with_confirmations = @families.select { |f| f.confirmed_members_count > 0 }.count %>
+  <% total_confirmed_members = @families.sum(&:confirmed_members_count) %>
+  <!-- Contagem por faixa etária -->
+  <% adults_count = 0 %>
+  <% children_6_to_12_count = 0 %>
+  <% children_0_to_5_count = 0 %>
+  <% @families.each do |family| %>
+    <% family.members.where(confirmed: true).each do |member| %>
+      <% if member.age.present? %>
+        <% if member.age >= 12 %>
+          <% adults_count += 1 %>
+        <% elsif member.age >= 6 %>
+          <% children_6_to_12_count += 1 %>
+        <% else %>
+          <% children_0_to_5_count += 1 %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <!-- Cards para resumos -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h3 class="text-sm font-medium text-gray-500 mb-1">Total de Famílias</h3>
+      <p class="text-3xl font-bold text-[#2D3047]"><%= total_families %></p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h3 class="text-sm font-medium text-gray-500 mb-1">Famílias com Confirmações</h3>
+      <p class="text-3xl font-bold text-[#2D3047]"><%= total_families_with_confirmations %></p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h3 class="text-sm font-medium text-gray-500 mb-1">Total de Pessoas Confirmadas</h3>
+      <p class="text-3xl font-bold text-[#2D3047]"><%= total_confirmed_members %></p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h3 class="text-sm font-medium text-gray-500 mb-1">Taxa de Confirmação</h3>
+      <p class="text-3xl font-bold text-[#2D3047]"><%= number_to_percentage(total_families_with_confirmations.to_f / total_families * 100, precision: 1) rescue "0.0%" %></p>
+    </div>
+  </div>
+  <!-- Gráfico de faixas etárias -->
+  <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+    <h2 class="text-xl font-bold mb-4 text-[#2D3047]">Distribuição por Faixa Etária</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-blue-100 p-4 rounded-lg border border-blue-200">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-medium text-blue-800">Adultos (12+ anos)</h3>
+          <span class="text-xl font-bold text-blue-800"><%= adults_count %></span>
+        </div>
+        <div class="w-full bg-blue-200 rounded-full h-4">
+          <div class="bg-blue-600 h-4 rounded-full" style="width: <%= adults_count.to_f / total_confirmed_members * 100 rescue 0 %>%"></div>
+        </div>
+        <p class="mt-2 text-sm text-blue-700"><%= number_to_percentage(adults_count.to_f / total_confirmed_members * 100, precision: 1) rescue "0.0%" %> do total</p>
+      </div>
+      <div class="bg-green-100 p-4 rounded-lg border border-green-200">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-medium text-green-800">Crianças (6-12 anos)</h3>
+          <span class="text-xl font-bold text-green-800"><%= children_6_to_12_count %></span>
+        </div>
+        <div class="w-full bg-green-200 rounded-full h-4">
+          <div class="bg-green-600 h-4 rounded-full" style="width: <%= children_6_to_12_count.to_f / total_confirmed_members * 100 rescue 0 %>%"></div>
+        </div>
+        <p class="mt-2 text-sm text-green-700"><%= number_to_percentage(children_6_to_12_count.to_f / total_confirmed_members * 100, precision: 1) rescue "0.0%" %> do total</p>
+      </div>
+      <div class="bg-orange-100 p-4 rounded-lg border border-orange-200">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-medium text-orange-800">Crianças (0-5 anos)</h3>
+          <span class="text-xl font-bold text-orange-800"><%= children_0_to_5_count %></span>
+        </div>
+        <div class="w-full bg-orange-200 rounded-full h-4">
+          <div class="bg-orange-600 h-4 rounded-full" style="width: <%= children_0_to_5_count.to_f / total_confirmed_members * 100 rescue 0 %>%"></div>
+        </div>
+        <p class="mt-2 text-sm text-orange-700"><%= number_to_percentage(children_0_to_5_count.to_f / total_confirmed_members * 100, precision: 1) rescue "0.0%" %> do total</p>
+      </div>
+    </div>
+  </div>
+  <!-- Tabela de famílias com confirmações -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-bold mb-4 text-[#2D3047]">Famílias com Confirmações</h2>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Família</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Adultos (12+)</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Crianças (6-12)</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Crianças (0-5)</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Confirmados</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @families.select { |f| f.confirmed_members_count > 0 }.each do |family| %>
+            <%
+              # Contagem por faixa etária para esta família
+              family_adults = family.members.where(confirmed: true).select { |m| m.age && m.age >= 12 }.count
+              family_children_6_12 = family.members.where(confirmed: true).select { |m| m.age && m.age >= 6 && m.age < 12 }.count
+              family_children_0_5 = family.members.where(confirmed: true).select { |m| m.age && m.age < 6 }.count
+            %>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-900"><%= family.name %></div>
+                <div class="text-sm text-gray-500"><%= family.phone %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900"><%= family_adults %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900"><%= family_children_6_12 %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900"><%= family_children_0_5 %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-bold text-gray-900"><%= family.confirmed_members_count %></div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

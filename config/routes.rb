@@ -25,6 +25,8 @@ Rails.application.routes.draw do
 
     # Relatórios e estatísticas
     get "reports", to: "reports#index"
+    get "reports/family_stats", to: "reports#family_stats", as: :family_stats
+    get "reports/confirmed_members", to: "reports#confirmed_members", as: :confirmed_members
 
     # Montagem do Sidekiq dentro do namespace admin
     authenticate :user, lambda { |u| u.admin? } do

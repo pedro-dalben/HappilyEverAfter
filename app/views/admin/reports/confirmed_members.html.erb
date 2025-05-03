@@ -1,0 +1,38 @@
+<div class="container px-4 py-8 mx-auto">
+  <h1 class="text-2xl font-bold mb-6 text-center text-[#2D3047]">Membros Confirmados por Família</h1>
+  <div class="flex justify-end mb-4">
+    <%= link_to admin_confirmed_members_path(format: :pdf), class: "px-4 py-2 bg-[#73C8A9] text-white font-medium rounded-md hover:bg-[#73C8A9]/90 transition-colors flex items-center" do %>
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+      </svg>
+      Baixar PDF Completo
+    <% end %>
+  </div>
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-bold mb-4 text-[#2D3047]">Lista de Famílias e Membros Confirmados</h2>
+    <div class="space-y-6">
+      <% @families.each do |family| %>
+        <div class="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+          <h3 class="text-lg font-semibold text-[#2D3047] mb-2">
+            <%= family.name %>
+            <span class="text-sm font-normal text-gray-500">
+              (<%= family.confirmed_members_count %> <%= family.confirmed_members_count == 1 ? 'membro confirmado' : 'membros confirmados' %>)
+            </span>
+          </h3>
+          <div class="ml-4">
+            <ul class="list-disc pl-4">
+              <% family.members.where(confirmed: true).each do |member| %>
+                <li class="text-gray-700">
+                  <%= member.name %>
+                  <% if member.age.present? %>
+                    <span class="text-sm text-gray-500">(<%= member.age %> anos)</span>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
