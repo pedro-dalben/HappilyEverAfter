@@ -201,78 +201,100 @@
     bottom: 20px !important; /* Força posição da paginação */
   }
 </style>
-<!-- Divisor simples antes do RSVP -->
+<!-- Divisor simples antes da galeria de fotos -->
 <div class="h-24 bg-gradient-to-b from-gray-50 to-[#73C8A9]/20"></div>
-<!-- RSVP SECTION -->
-<section class="relative py-32 bg-[#73C8A9]/20">
-  <div class="container relative px-4 mx-auto text-center">
-    <div class="max-w-2xl mx-auto mb-16" data-aos="fade-up">
-      <h2 class="mb-8 font-serif text-5xl text-[#2D3047] drop-shadow-sm">
-        Confirme Sua Presença
-      </h2>
-      <p class="mb-10 text-lg text-[#2D3047]/80">
-        Sua presença é fundamental para tornar este momento ainda mais especial
-      </p>
-      <%= link_to rsvp_path,
-                  class: "relative
-                          inline-flex
-                          items-center
-                          justify-center
-                          px-8
-                          py-4
-                          text-lg
-                          font-light
-                          tracking-wider
-                          text-white
-                          transition-all
-                          duration-300
-                          border-2
-                          border-white
-                          hover:bg-[#35799F]
-                          group
-                          bg-[#3c8bb4]",
-                  data: { turbo_frame: "rsvp_modal" } do %>
-        <span class="relative z-10">Confirme sua presença</span>
+<!-- GALERIA DE FOTOS DO CASAMENTO -->
+<section class="py-32 bg-[#73C8A9]/20">
+  <div class="container px-4 mx-auto">
+    <h2 class="mb-16 font-serif text-4xl text-center text-[#2D3047]" data-aos="fade-up">
+      Nossas Fotos
+    </h2>
+    <!-- Filtros e Busca -->
+    <div class="flex flex-wrap items-center justify-center gap-4 mb-12" data-aos="fade-up">
+      <div class="relative">
+        <input type="text"
+               id="searchPhotos"
+               placeholder="Buscar fotos..."
+               class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#73C8A9]">
+      </div>
+      <div class="flex gap-2">
+        <button class="px-4 py-2 text-white transition-colors bg-[#73C8A9] rounded-lg hover:bg-[#5ab08f] filter-btn active" data-filter="all">
+          Todas
+        </button>
+        <button class="px-4 py-2 text-white transition-colors bg-[#73C8A9] rounded-lg hover:bg-[#5ab08f] filter-btn" data-filter="ceremony">
+          Cerimônia
+        </button>
+        <button class="px-4 py-2 text-white transition-colors bg-[#73C8A9] rounded-lg hover:bg-[#5ab08f] filter-btn" data-filter="party">
+          Festa
+        </button>
+      </div>
+    </div>
+    <!-- Grid de Fotos -->
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4" id="photoGrid">
+      <% @wedding_photos.each_with_index do |photo, i| %>
+        <div class="relative overflow-hidden cursor-pointer group photo-item"
+             data-aos="fade-up"
+             data-aos-delay="<%= i * 50 %>"
+             data-category="<%= photo.category %>"
+             onclick="openPhotoModal(<%= i %>)">
+          <%= image_tag asset_path("wedding_photos/#{photo.filename}"),
+              alt: photo.description,
+              class: "object-cover w-full transition-transform duration-700 transform aspect-square hover:scale-110",
+              loading: "lazy" %>
+          <div class="absolute inset-0 transition-opacity opacity-0 bg-black/50 group-hover:opacity-100">
+            <div class="flex items-center justify-center h-full">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m4-3H6"/>
+              </svg>
+            </div>
+          </div>
+        </div>
       <% end %>
     </div>
-
-    <div class="max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="200">
-      <h2 class="mb-8 font-serif text-5xl text-[#2D3047] drop-shadow-sm">
-        Lista de Presentes
-      </h2>
-      <p class="mb-10 text-lg text-[#2D3047]/80">
-        Seu presente será uma contribuição valiosa para nossa nova vida a dois
-      </p>
-      <%= link_to gift_registry_path,
-                  class: "relative
-                          inline-flex
-                          items-center
-                          justify-center
-                          px-8
-                          py-4
-                          text-lg
-                          font-light
-                          tracking-wider
-                          text-white
-                          transition-all
-                          duration-300
-                          border-2
-                          border-white
-                          hover:bg-[#73C8A9]/80
-                          group
-                          bg-[#73C8A9]" do %>
-        <span class="relative z-10">Lista de Presentes</span>
-      <% end %>
-    </div>
-
-    <!-- Data decorativa -->
-    <div class="mt-16 space-y-2 text-[#2D3047]/80">
-      <p class="text-xl font-light">3 de Maio de 2025</p>
-      <div class="w-16 h-[1px] mx-auto bg-[#2D3047]/30"></div>
-      <p class="font-light">11:00</p>
+    <!-- Load More Button -->
+    <div class="flex justify-center mt-12" data-aos="fade-up">
+      <button id="loadMoreBtn" class="px-8 py-3 text-white transition-colors bg-[#73C8A9] rounded-lg hover:bg-[#5ab08f]">
+        Carregar Mais Fotos
+      </button>
     </div>
   </div>
 </section>
+<!-- Modal de Fotos -->
+<div id="photoModal" class="fixed inset-0 z-50 hidden bg-black/90">
+  <div class="relative flex items-center justify-center h-full">
+    <!-- Botão de Fechar -->
+    <button onclick="closePhotoModal()" class="absolute z-50 p-2 text-white transition-colors hover:text-gray-300 right-4 top-4">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+    <!-- Botão de Download -->
+    <button onclick="downloadPhoto()" class="absolute z-50 p-2 text-white transition-colors hover:text-gray-300 right-16 top-4">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+      </svg>
+    </button>
+    <!-- Carrossel de Fotos -->
+    <div class="h-full swiper-container">
+      <div class="swiper-wrapper">
+        <% @wedding_photos.each do |photo| %>
+          <div class="flex items-center justify-center swiper-slide">
+            <div class="relative flex items-center justify-center w-full h-full p-4">
+              <%= image_tag asset_path("wedding_photos/#{photo.filename}"),
+                  class: "max-w-full max-h-full h-auto w-auto object-contain",
+                  data-original: asset_path("wedding_photos/#{photo.filename}") %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <!-- Navegação -->
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <!-- Paginação -->
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</div>
 <!-- FOOTER -->
 <footer class="py-8 text-center bg-black text-white/80">
   <p class="text-sm tracking-wider">
@@ -301,123 +323,160 @@
         element.style.transform = `translateY(${scrollPosition * speed}px)`;
       });
     });
-  });
 
-  let swiper;
-  const AUTOPLAY_DELAY = 5000; // 5 segundos
+    // Configuração inicial
+    let currentPage = 1;
+    const photosPerPage = 20;
+    let photoSwiper;
+    let allPhotos = [];
+    let filteredPhotos = [];
 
-  function openModal(initialSlide) {
-    const modal = document.getElementById('galleryModal');
-    modal.classList.remove('hidden');
-
-    if (!swiper) {
-      swiper = new Swiper('.swiper-container', {
-        initialSlide: initialSlide,
+    // Inicializa o Swiper para o modal de fotos
+    function initPhotoSwiper() {
+      photoSwiper = new Swiper('.swiper-container', {
         grabCursor: true,
         spaceBetween: 30,
         loop: true,
-
-        // Autoplay
-        autoplay: {
-          delay: AUTOPLAY_DELAY,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true
+        keyboard: {
+          enabled: true,
         },
-
-        // Efeito de fade
-        effect: 'fade',
-        fadeEffect: {
-          crossFade: true
-        },
-
-        // Navegação
         navigation: {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev',
         },
-
-        // Paginação
         pagination: {
           el: '.swiper-pagination',
-          type: 'bullets',
-          clickable: true
+          clickable: true,
         },
-
-        // Teclado e Mouse
-        keyboard: {
-          enabled: true,
-          onlyInViewport: false,
-        },
-        mousewheel: {
-          invert: false,
-        },
-
-        // Responsivo
-        breakpoints: {
-          640: {
-            slidesPerView: 1,
-          },
-          768: {
-            slidesPerView: 1,
-          },
-          1024: {
-            slidesPerView: 1,
-          },
-        },
-
-        on: {
-          autoplayTimeLeft(s, time, progress) {
-            const progressBar = document.querySelector('.slide_progress-bar');
-            if (progressBar) {
-              progressBar.style.width = `${(1 - progress) * 100}%`;
-              progressBar.style.opacity = 1;
-            }
-          },
-
-          slideChange: function () {
-            const progressBar = document.querySelector('.slide_progress-bar');
-            if (progressBar) {
-              progressBar.style.width = '0%';
-              progressBar.style.opacity = 0;
-            }
-          }
-        }
       });
-    } else {
-      swiper.slideTo(initialSlide, 0);
-      swiper.autoplay.start();
     }
+
+    // Função para carregar mais fotos
+    function loadMorePhotos() {
+      const start = (currentPage - 1) * photosPerPage;
+      const end = start + photosPerPage;
+      const photosToShow = filteredPhotos.slice(start, end);
+
+      const photoGrid = document.getElementById('photoGrid');
+      photosToShow.forEach((photo, index) => {
+        const photoElement = createPhotoElement(photo, start + index);
+        photoGrid.appendChild(photoElement);
+      });
+
+      currentPage++;
+
+      // Esconde o botão se não houver mais fotos
+      if (end >= filteredPhotos.length) {
+        document.getElementById('loadMoreBtn').style.display = 'none';
+      }
+    }
+
+    // Função para criar elemento de foto
+    function createPhotoElement(photo, index) {
+      const div = document.createElement('div');
+      div.className = 'relative overflow-hidden cursor-pointer group photo-item';
+      div.setAttribute('data-aos', 'fade-up');
+      div.setAttribute('data-aos-delay', `${index * 50}`);
+      div.setAttribute('data-category', photo.category);
+      div.onclick = () => openPhotoModal(index);
+
+      div.innerHTML = `
+        <img src="${photo.thumbnail}"
+             alt="${photo.description}"
+             class="object-cover w-full transition-transform duration-700 transform aspect-square hover:scale-110"
+             loading="lazy">
+        <div class="absolute inset-0 transition-opacity opacity-0 bg-black/50 group-hover:opacity-100">
+          <div class="flex items-center justify-center h-full">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m4-3H6"/>
+            </svg>
+          </div>
+        </div>
+      `;
+
+      return div;
+    }
+
+    // Função para filtrar fotos
+    function filterPhotos(category) {
+      filteredPhotos = category === 'all'
+        ? allPhotos
+        : allPhotos.filter(photo => photo.category === category);
+
+      currentPage = 1;
+      document.getElementById('photoGrid').innerHTML = '';
+      document.getElementById('loadMoreBtn').style.display = 'block';
+      loadMorePhotos();
+    }
+
+    // Função para buscar fotos
+    function searchPhotos(query) {
+      query = query.toLowerCase();
+      filteredPhotos = allPhotos.filter(photo =>
+        photo.description.toLowerCase().includes(query) ||
+        photo.category.toLowerCase().includes(query)
+      );
+
+      currentPage = 1;
+      document.getElementById('photoGrid').innerHTML = '';
+      document.getElementById('loadMoreBtn').style.display = 'block';
+      loadMorePhotos();
+    }
+
+    // Event Listeners
+    document.getElementById('loadMoreBtn').addEventListener('click', loadMorePhotos);
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        filterPhotos(e.target.dataset.filter);
+      });
+    });
+
+    document.getElementById('searchPhotos').addEventListener('input', (e) => {
+      searchPhotos(e.target.value);
+    });
+
+    // Inicialização
+    initPhotoSwiper();
+    loadMorePhotos();
+  });
+
+  // Funções do Modal
+  function openPhotoModal(index) {
+    const modal = document.getElementById('photoModal');
+    modal.classList.remove('hidden');
+    photoSwiper.slideTo(index, 0);
   }
 
-  function closeModal() {
-    const modal = document.getElementById('galleryModal');
+  function closePhotoModal() {
+    const modal = document.getElementById('photoModal');
     modal.classList.add('hidden');
-    if (swiper) {
-      swiper.autoplay.stop();
-    }
+  }
+
+  function downloadPhoto() {
+    const currentSlide = photoSwiper.slides[photoSwiper.activeIndex];
+    const img = currentSlide.querySelector('img');
+    const link = document.createElement('a');
+    link.href = img.dataset.original;
+    link.download = img.alt || 'foto-casamento';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   // Fecha o modal com a tecla ESC
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-      closeModal();
+      closePhotoModal();
     }
   });
 
   // Fecha o modal clicando fora da imagem
-  document.getElementById('galleryModal').addEventListener('click', function(e) {
+  document.getElementById('photoModal').addEventListener('click', function(e) {
     if (e.target === this) {
-      closeModal();
+      closePhotoModal();
     }
-  });
-
-  // Pausa o autoplay quando o mouse está sobre a imagem
-  document.querySelector('.swiper-container')?.addEventListener('mouseenter', () => {
-    swiper?.autoplay.stop();
-  });
-
-  // Retoma o autoplay quando o mouse sai da imagem
-  document.querySelector('.swiper-container')?.addEventListener('mouseleave', () => {
-    swiper?.autoplay.start();
   });
 </script>
