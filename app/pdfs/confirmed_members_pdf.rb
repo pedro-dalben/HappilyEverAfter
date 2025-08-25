@@ -6,12 +6,7 @@ class ConfirmedMembersPdf < Prawn::Document
   end
 
   def generate_content
-    font_families.update("Roboto" => {
-      normal: Rails.root.join("app/assets/fonts/Roboto-Regular.ttf"),
-      bold: Rails.root.join("app/assets/fonts/Roboto-Bold.ttf"),
-      italic: Rails.root.join("app/assets/fonts/Roboto-Italic.ttf")
-    })
-    font("Roboto")
+
 
     # Título
     text "Membros Confirmados por Família", size: 16, style: :bold, align: :center

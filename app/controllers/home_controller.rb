@@ -1,7 +1,16 @@
 class HomeController < ApplicationController
   def index
-    images_dir = Rails.root.join("app", "assets", "images", "carrosel")
-    # Grab all files in /carrosel (any name or type) and map to filenames
-    @carousel_images = Dir.glob("#{images_dir}/*").map { |f| File.basename(f) }
+    # Carrossel de imagens
+    @carousel_images = Dir.glob(Rails.root.join('app/assets/images/carrosel/*')).map { |f| File.basename(f) }
+
+    # Fotos do casamento (apenas as versões processadas)
+    @wedding_photos = Dir.glob(Rails.root.join('app/assets/images/processed/thumb_*')).map do |file|
+      filename = File.basename(file).gsub('thumb_', '')
+      {
+        filename: filename,
+        thumbnail: ActionController::Base.helpers.asset_path("processed/thumb_#{filename}"),
+        preview: ActionController::Base.helpers.asset_path("processed/preview_#{filename}")
+      }
+    end
   end
 end

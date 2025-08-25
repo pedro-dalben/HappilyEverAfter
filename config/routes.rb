@@ -87,4 +87,6 @@ Rails.application.routes.draw do
   # resources :admin_gifts, only: [:index, :show] do
   #   patch :update_status, on: :member
   # end
+
+  post 'import_photos', to: 'home#import_photos', as: :import_photos
 end

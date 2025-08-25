@@ -203,96 +203,77 @@
 </style>
 <!-- Divisor simples antes da galeria de fotos -->
 <div class="h-24 bg-gradient-to-b from-gray-50 to-[#73C8A9]/20"></div>
-<!-- GALERIA DE FOTOS DO CASAMENTO -->
-<section class="py-32 bg-[#73C8A9]/20">
+
+<!-- VÍDEO DO CASAMENTO -->
+<section class="py-16 bg-[#73C8A9]/20">
   <div class="container px-4 mx-auto">
-    <h2 class="mb-16 font-serif text-4xl text-center text-[#2D3047]" data-aos="fade-up">
-      Nossas Fotos
-    </h2>
-    <!-- Filtros e Busca -->
-    <div class="flex flex-wrap items-center justify-center gap-4 mb-12" data-aos="fade-up">
-      <div class="relative">
-        <input type="text"
-               id="searchPhotos"
-               placeholder="Buscar fotos..."
-               class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#73C8A9]">
-      </div>
-      <div class="flex gap-2">
-        <button class="px-4 py-2 text-white transition-colors bg-[#73C8A9] rounded-lg hover:bg-[#5ab08f] filter-btn active" data-filter="all">
-          Todas
-        </button>
-        <button class="px-4 py-2 text-white transition-colors bg-[#73C8A9] rounded-lg hover:bg-[#5ab08f] filter-btn" data-filter="ceremony">
-          Cerimônia
-        </button>
-        <button class="px-4 py-2 text-white transition-colors bg-[#73C8A9] rounded-lg hover:bg-[#5ab08f] filter-btn" data-filter="party">
-          Festa
-        </button>
-      </div>
+    <div class="flex flex-col items-center mb-10 space-y-4">
+      <h2 class="font-serif text-4xl text-center text-[#2D3047]" data-aos="fade-up">
+        Filme do Casamento
+      </h2>
     </div>
-    <!-- Grid de Fotos -->
-    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4" id="photoGrid">
-      <% @wedding_photos.each_with_index do |photo, i| %>
-        <div class="relative overflow-hidden cursor-pointer group photo-item"
-             data-aos="fade-up"
-             data-aos-delay="<%= i * 50 %>"
-             data-category="<%= photo.category %>"
-             onclick="openPhotoModal(<%= i %>)">
-          <%= image_tag asset_path("wedding_photos/#{photo.filename}"),
-              alt: photo.description,
-              class: "object-cover w-full transition-transform duration-700 transform aspect-square hover:scale-110",
-              loading: "lazy" %>
-          <div class="absolute inset-0 transition-opacity opacity-0 bg-black/50 group-hover:opacity-100">
-            <div class="flex items-center justify-center h-full">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m4-3H6"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    </div>
-    <!-- Load More Button -->
-    <div class="flex justify-center mt-12" data-aos="fade-up">
-      <button id="loadMoreBtn" class="px-8 py-3 text-white transition-colors bg-[#73C8A9] rounded-lg hover:bg-[#5ab08f]">
-        Carregar Mais Fotos
-      </button>
+    <div class="flex justify-center">
+      <div class="w-full max-w-[1024px] h-[600px] overflow-hidden rounded-lg shadow-xl" data-aos="fade-up">
+        <iframe
+          class="w-full h-full"
+          src="https://www.youtube.com/embed/mVZYB2SyXCo?si=KctF2PFTgWbtPETQ"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
     </div>
   </div>
 </section>
-<!-- Modal de Fotos -->
-<div id="photoModal" class="fixed inset-0 z-50 hidden bg-black/90">
-  <div class="relative flex items-center justify-center h-full">
-    <!-- Botão de Fechar -->
-    <button onclick="closePhotoModal()" class="absolute z-50 p-2 text-white transition-colors hover:text-gray-300 right-4 top-4">
-      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+<!-- GALERIA DE FOTOS DO CASAMENTO -->
+<section class="py-32 bg-[#73C8A9]/20">
+  <div class="container px-4 mx-auto">
+    <div class="flex flex-col items-center mb-16 space-y-4">
+      <h2 class="font-serif text-4xl text-center text-[#2D3047]" data-aos="fade-up">
+        Nossas Fotos
+      </h2>
+    </div>
+
+    <!-- Grid de Fotos -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <% @wedding_photos.each_with_index do |photo, index| %>
+        <div class="relative group" data-category="wedding">
+          <%= image_tag photo[:thumbnail],
+              class: "w-full h-48 object-cover rounded-lg cursor-pointer transition-transform duration-300 group-hover:scale-105",
+              onclick: "openPhotoModal('#{photo[:filename]}')" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+<!-- Modal -->
+<div id="photoModal" class="fixed inset-0 bg-black bg-opacity-75 hidden flex items-center justify-center z-50 p-4">
+  <div class="relative w-full h-full flex flex-col items-center justify-center">
+    <% @wedding_photos.each do |photo| %>
+      <div class="hidden photo-slide flex flex-col items-center justify-center h-full" data-photo-id="<%= photo[:filename] %>">
+        <div class="relative w-full h-full flex flex-col items-center justify-center">
+          <div class="flex items-center justify-center" style="height: calc(100vh - 200px);">
+            <%= image_tag photo[:preview],
+                class: "max-w-full max-h-full w-auto h-auto object-contain rounded-lg" %>
+          </div>
+
+          <div class="w-full mt-4 text-white text-center">
+            <p class="text-lg mb-2"><%= photo[:filename].gsub(/\.[^.]*$/, '') %></p>
+            <%= link_to "Download", ActionController::Base.helpers.asset_path("wedding_photos/#{photo[:filename]}"),
+                class: "inline-block bg-white text-black px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium",
+                download: photo[:filename] %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <button class="absolute top-4 right-4 text-white hover:text-gray-300 bg-black/50 p-2 rounded-full backdrop-blur-sm" onclick="closePhotoModal()">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
       </svg>
     </button>
-    <!-- Botão de Download -->
-    <button onclick="downloadPhoto()" class="absolute z-50 p-2 text-white transition-colors hover:text-gray-300 right-16 top-4">
-      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-      </svg>
-    </button>
-    <!-- Carrossel de Fotos -->
-    <div class="h-full swiper-container">
-      <div class="swiper-wrapper">
-        <% @wedding_photos.each do |photo| %>
-          <div class="flex items-center justify-center swiper-slide">
-            <div class="relative flex items-center justify-center w-full h-full p-4">
-              <%= image_tag asset_path("wedding_photos/#{photo.filename}"),
-                  class: "max-w-full max-h-full h-auto w-auto object-contain",
-                  data-original: asset_path("wedding_photos/#{photo.filename}") %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-      <!-- Navegação -->
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
-      <!-- Paginação -->
-      <div class="swiper-pagination"></div>
-    </div>
   </div>
 </div>
 <!-- FOOTER -->
@@ -302,14 +283,85 @@
   </p>
 </footer>
 <script>
+  // Funções globais dos modais
+  function openPhotoModal(filename) {
+    const modal = document.getElementById('photoModal');
+    if (modal) {
+      modal.classList.remove('hidden');
+
+      document.querySelectorAll('.photo-slide').forEach(slide => {
+        slide.classList.add('hidden');
+      });
+
+      const activeSlide = document.querySelector(`.photo-slide[data-photo-id="${filename}"]`);
+      if (activeSlide) {
+        activeSlide.classList.remove('hidden');
+      }
+    }
+  }
+
+  function closePhotoModal() {
+    const modal = document.getElementById('photoModal');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  }
+
+  function openModal(index) {
+    const modal = document.getElementById('galleryModal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      if (typeof photoSwiper !== 'undefined') {
+        photoSwiper.slideTo(index, 0);
+      }
+    }
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('galleryModal');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
+    // Registra event listeners para modais
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePhotoModal();
+        closeModal();
+      }
+    });
+
+    const photoModal = document.getElementById('photoModal');
+    if (photoModal) {
+      photoModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          closePhotoModal();
+        }
+      });
+    }
+
+    const galleryModal = document.getElementById('galleryModal');
+    if (galleryModal) {
+      galleryModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeModal();
+        }
+      });
+    }
+
     // Smooth Scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
-        });
+        const href = this.getAttribute('href');
+        const targetElement = document.querySelector(href);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
       });
     });
 
@@ -333,22 +385,33 @@
 
     // Inicializa o Swiper para o modal de fotos
     function initPhotoSwiper() {
-      photoSwiper = new Swiper('.swiper-container', {
-        grabCursor: true,
-        spaceBetween: 30,
-        loop: true,
-        keyboard: {
-          enabled: true,
-        },
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-        },
-      });
+      if (typeof Swiper === 'undefined') {
+        console.error('Swiper não está disponível');
+        setTimeout(initPhotoSwiper, 500);
+        return;
+      }
+
+      try {
+        photoSwiper = new Swiper('.swiper-container', {
+          grabCursor: true,
+          spaceBetween: 30,
+          loop: true,
+          keyboard: {
+            enabled: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+        });
+        console.log('Swiper inicializado com sucesso');
+      } catch (error) {
+        console.error('Erro ao inicializar o Swiper:', error);
+      }
     }
 
     // Função para carregar mais fotos
@@ -424,59 +487,41 @@
     }
 
     // Event Listeners
-    document.getElementById('loadMoreBtn').addEventListener('click', loadMorePhotos);
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', loadMorePhotos);
+    }
 
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        filterPhotos(e.target.dataset.filter);
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    if (filterBtns.length > 0) {
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          e.target.classList.add('active');
+          filterPhotos(e.target.dataset.filter);
+        });
       });
-    });
+    }
 
-    document.getElementById('searchPhotos').addEventListener('input', (e) => {
-      searchPhotos(e.target.value);
-    });
+    const searchInput = document.getElementById('searchPhotos');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchPhotos(e.target.value);
+      });
+    }
 
     // Inicialização
     initPhotoSwiper();
-    loadMorePhotos();
-  });
 
-  // Funções do Modal
-  function openPhotoModal(index) {
-    const modal = document.getElementById('photoModal');
-    modal.classList.remove('hidden');
-    photoSwiper.slideTo(index, 0);
-  }
-
-  function closePhotoModal() {
-    const modal = document.getElementById('photoModal');
-    modal.classList.add('hidden');
-  }
-
-  function downloadPhoto() {
-    const currentSlide = photoSwiper.slides[photoSwiper.activeIndex];
-    const img = currentSlide.querySelector('img');
-    const link = document.createElement('a');
-    link.href = img.dataset.original;
-    link.download = img.alt || 'foto-casamento';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  // Fecha o modal com a tecla ESC
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      closePhotoModal();
-    }
-  });
-
-  // Fecha o modal clicando fora da imagem
-  document.getElementById('photoModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-      closePhotoModal();
-    }
+    // Adiciona eventos de toque para mobiles
+    document.querySelectorAll('[onclick]').forEach(element => {
+      const onclickValue = element.getAttribute('onclick');
+      if (onclickValue) {
+        element.addEventListener('touchend', function(e) {
+          e.preventDefault();
+          eval(onclickValue);
+        });
+      }
+    });
   });
 </script>

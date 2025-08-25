@@ -94,3 +94,7 @@ gem "faraday", "~> 2.13"
 
 gem "prawn"
 gem "prawn-table"
+
+# Processamento de imagens
+gem 'image_processing', '~> 1.2'
+gem 'ruby-vips', '~> 2.2'

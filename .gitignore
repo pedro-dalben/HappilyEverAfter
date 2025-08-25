@@ -43,3 +43,5 @@
 config/database.yml
 config/credentials.yml.enc
 config/credentials.yml.enc
+app/assets/images/wedding_photos/*
+app/assets/images/processed/*

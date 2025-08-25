@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_24_024633) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_11_193605) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -64,6 +64,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_24_024633) do
     t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "disabled", default: false, null: false
   end
 
   create_table "members", force: :cascade do |t|
@@ -106,6 +107,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_24_024633) do
     t.text "error_message"
     t.datetime "paid_at"
     t.index ["family_id"], name: "index_orders_on_family_id"
+  end
+
+  create_table "photos", force: :cascade do |t|
+    t.string "description"
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "filename"
+    t.index ["filename"], name: "index_photos_on_filename", unique: true
   end
 
   create_table "processed_webhooks", force: :cascade do |t|
