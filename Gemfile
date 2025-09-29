@@ -67,7 +67,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # General Ruby linter
-  gem "rubocop", "~> 1.78"
+  gem "rubocop", "~> 1.81"
 end
 
 group :development do
