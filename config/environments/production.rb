@@ -20,6 +20,10 @@ Rails.application.configure do
 
   config.public_file_server.enabled = true
 
+  app_host = ENV.fetch("APP_HOST", "casamento.pedrodalben.com.br")
+  app_protocol = ENV.fetch("APP_PROTOCOL", "https")
+  cable_protocol = app_protocol == "https" ? "wss" : "ws"
+  app_host_aliases = ENV.fetch("APP_HOST_ALIASES", "").split(",").map(&:strip).reject(&:blank?)
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -60,7 +64,7 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.com" }
+  config.action_mailer.default_url_options = { host: app_host, protocol: app_protocol }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
@@ -95,8 +99,7 @@ Rails.application.configure do
   config.hosts << "www.asaas.com"
 
   config.action_cable.allowed_request_origins = [ /http:\/\/*/, /https:\/\/*/ ]
-  config.action_cable.url = "wss://giovanaepedro.com.br/cable"
-  config.action_cable.mount_path = "/cable"
-  config.hosts << "www.giovanaepedro.com.br"
-  config.hosts << "giovanaepedro.com.br"
+  config.action_cable.url = ENV.fetch("ACTION_CABLE_URL", "#{cable_protocol}://#{app_host}#{ENV.fetch("ACTION_CABLE_MOUNT_PATH", "/cable")}")
+  config.action_cable.mount_path = ENV.fetch("ACTION_CABLE_MOUNT_PATH", "/cable")
+  ([app_host] + app_host_aliases).each { |host| config.hosts << host }
 end

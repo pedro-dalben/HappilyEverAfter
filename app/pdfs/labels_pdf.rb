@@ -106,7 +106,7 @@ class LabelsPdf < Prawn::Document
                  size: 10
 
         # Site
-        text_box "giovanaepedro.com.br",
+        text_box ENV.fetch("PUBLIC_SITE_HOST", ENV.fetch("APP_HOST", "casamento.pedrodalben.com.br")),
                  at: [ @label_border * 2, @label_height * 0.45 ],
                  width: @label_width - @label_border * 4,
                  height: @label_height * 0.2,

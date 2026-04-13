@@ -1,7 +1,8 @@
 namespace :asaas do
   desc "Configura o webhook do Asaas"
   task configure_webhook: :environment do
-    webhook_url = ENV["WEBHOOK_URL"] || "https://giovanaepedro.com.br/api/webhooks/asaas"
+    public_site_url = ENV.fetch("PUBLIC_SITE_URL", "https://#{ENV.fetch("APP_HOST", "casamento.pedrodalben.com.br")}")
+    webhook_url = ENV["WEBHOOK_URL"] || "#{public_site_url}/api/webhooks/asaas"
 
     puts "Configurando webhook do Asaas para URL: #{webhook_url}"
 

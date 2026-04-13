@@ -122,7 +122,7 @@ class AsaasService
 
     webhook_data = {
       url: webhook_url,
-      email: "admin@giovanaepedro.com.br",
+      email: ENV.fetch("ASAAS_WEBHOOK_EMAIL", "admin@#{ENV.fetch("APP_HOST", "casamento.pedrodalben.com.br")}"),
       apiVersion: 3,
       enabled: true,
       interrupted: false,
