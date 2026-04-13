@@ -26,7 +26,7 @@ gem "turbo-rails"        # Turbo (Hotwire)
 gem "stimulus-rails"     # Stimulus (Hotwire)
 
 # Tailwind CSS integration
-gem "tailwindcss-ruby", "~> 4.0"
+gem "tailwindcss-ruby", "~> 4.1"
 gem "tailwindcss-rails", "~> 4.2"
 
 # --------------------------------------------
@@ -67,7 +67,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # General Ruby linter
-  gem "rubocop", "~> 1.75"
+  gem "rubocop", "~> 1.78"
 end
 
 group :development do
