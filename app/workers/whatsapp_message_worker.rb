@@ -12,7 +12,7 @@ class WhatsappMessageWorker
 
     logger.info("Iniciando processamento da mensagem WhatsApp ID=#{message_id}")
 
-    exists = ActiveRecord::Base.connection.select_value("SELECT EXISTS(SELECT 1 FROM whatsapp_messages WHERE id = #{message_id})")
+    exists = WhatsappMessage.where(id: message_id).exists?
 
     if exists
       logger.info("Verificação prévia: mensagem #{message_id} existe no banco de dados")
