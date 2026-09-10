@@ -85,18 +85,8 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
-  # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
-
-  # Permitir redirecionamentos para o Asaas
-  config.hosts << "sandbox.asaas.com"
-  config.hosts << "www.asaas.com"
+  # Enable DNS rebinding protection and allow only the configured app hosts.
+  config.hosts = ([app_host] + app_host_aliases + %w[sandbox.asaas.com www.asaas.com]).uniq
 
   config.action_cable.allowed_request_origins = ([app_host] + app_host_aliases).map do |host|
     "#{app_protocol}://#{host}"
