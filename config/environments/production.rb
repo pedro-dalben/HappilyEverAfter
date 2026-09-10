@@ -98,7 +98,9 @@ Rails.application.configure do
   config.hosts << "sandbox.asaas.com"
   config.hosts << "www.asaas.com"
 
-  config.action_cable.allowed_request_origins = [ /http:\/\/*/, /https:\/\/*/ ]
+  config.action_cable.allowed_request_origins = ([app_host] + app_host_aliases).map do |host|
+    "#{app_protocol}://#{host}"
+  end
   config.action_cable.url = ENV.fetch("ACTION_CABLE_URL", "#{cable_protocol}://#{app_host}#{ENV.fetch("ACTION_CABLE_MOUNT_PATH", "/cable")}")
   config.action_cable.mount_path = ENV.fetch("ACTION_CABLE_MOUNT_PATH", "/cable")
   ([app_host] + app_host_aliases).each { |host| config.hosts << host }
