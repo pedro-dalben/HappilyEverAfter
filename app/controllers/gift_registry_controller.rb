@@ -236,17 +236,15 @@ class GiftRegistryController < ApplicationController
 
   # Webhook para receber notificações do Asaas
   def payment_webhook
-    # Log da requisição para debug
-    Rails.logger.info("Recebido webhook do Asaas: #{request.raw_post}")
-    Rails.logger.info("User-Agent: #{request.user_agent}")
-    Rails.logger.info("IP Remoto: #{request.remote_ip}")
-    Rails.logger.info("Cabeçalhos: #{request.headers.select { |k, v| k =~ /^HTTP_/ }.inspect}")
+    return render json: { error: "Unauthorized" }, status: :unauthorized unless valid_asaas_webhook?
+
+    Rails.logger.info("Webhook Asaas recebido: bytes=#{request.raw_post.bytesize} user_agent=#{request.user_agent.inspect} ip=#{request.remote_ip}")
 
     # Parse do payload (com tratamento de erro)
     begin
       payload = JSON.parse(request.raw_post)
     rescue JSON::ParserError
-      Rails.logger.error("Erro ao fazer parse do payload JSON: #{request.raw_post}")
+      Rails.logger.error("Erro ao fazer parse do payload JSON")
       return render json: { error: "Invalid JSON" }, status: :bad_request
     end
 
@@ -255,7 +253,7 @@ class GiftRegistryController < ApplicationController
     event_id = payload["id"]
 
     unless event
-      Rails.logger.error("Webhook sem evento: #{payload}")
+      Rails.logger.error("Webhook sem evento")
       return render json: { error: "Missing event" }, status: :bad_request
     end
 
@@ -276,7 +274,7 @@ class GiftRegistryController < ApplicationController
 
     # Para outros eventos, precisamos do ID do pagamento
     unless payment_id
-      Rails.logger.error("Webhook sem ID de pagamento: #{payload}")
+      Rails.logger.error("Webhook sem ID de pagamento: event=#{event.inspect}")
       return render json: { error: "Missing payment ID" }, status: :bad_request
     end
 
@@ -457,6 +455,14 @@ class GiftRegistryController < ApplicationController
   end
 
   private
+
+  def valid_asaas_webhook?
+    expected = ENV["ASAAS_WEBHOOK_TOKEN"].to_s
+    provided = request.headers["asaas-access-token"].to_s
+    return false if expected.empty? || provided.empty? || expected.bytesize != provided.bytesize
+
+    ActiveSupport::SecurityUtils.secure_compare(provided, expected)
+  end
 
   def order_params
     params.require(:order).permit(:customer_name, :customer_email, :customer_phone, :customer_cpf_cnpj, :payment_method)
