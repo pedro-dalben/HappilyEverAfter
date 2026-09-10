@@ -515,11 +515,10 @@
 
     // Adiciona eventos de toque para mobiles
     document.querySelectorAll('[onclick]').forEach(element => {
-      const onclickValue = element.getAttribute('onclick');
-      if (onclickValue) {
+      if (element.getAttribute('onclick')) {
         element.addEventListener('touchend', function(e) {
           e.preventDefault();
-          eval(onclickValue);
+          element.click();
         });
       }
     });

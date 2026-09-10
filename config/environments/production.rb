@@ -85,20 +85,12 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
-  # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  # Enable DNS rebinding protection and allow only the configured app hosts.
+  config.hosts = ([app_host] + app_host_aliases + %w[sandbox.asaas.com www.asaas.com]).uniq
 
-  # Permitir redirecionamentos para o Asaas
-  config.hosts << "sandbox.asaas.com"
-  config.hosts << "www.asaas.com"
-
-  config.action_cable.allowed_request_origins = [ /http:\/\/*/, /https:\/\/*/ ]
+  config.action_cable.allowed_request_origins = ([app_host] + app_host_aliases).map do |host|
+    "#{app_protocol}://#{host}"
+  end
   config.action_cable.url = ENV.fetch("ACTION_CABLE_URL", "#{cable_protocol}://#{app_host}#{ENV.fetch("ACTION_CABLE_MOUNT_PATH", "/cable")}")
   config.action_cable.mount_path = ENV.fetch("ACTION_CABLE_MOUNT_PATH", "/cable")
   ([app_host] + app_host_aliases).each { |host| config.hosts << host }
