@@ -3,7 +3,7 @@ source "https://rubygems.org"
 # --------------------------------------------
 # 📦 Rails & Core Gems
 # --------------------------------------------
-gem "rails", "~> 8.0.2"
+gem "rails", ">= 8.0.5.1", "< 8.1"
 
 # Asset pipeline for Rails
 gem "propshaft"
@@ -36,9 +36,6 @@ gem "jbuilder"           # JSON API builder
 gem "devise", "~> 4.9"   # Authentication
 gem "simple_form"        # Form builder
 gem "simple_form-tailwind" # SimpleForm with TailwindCSS
-gem "sidekiq"
-
-
 # Background processing & caching
 gem "solid_cache"
 gem "solid_queue"
