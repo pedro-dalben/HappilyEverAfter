@@ -1,54 +1,41 @@
 # Comandos Rails na VPS — HappilyEverAfter
 
-## Produção permanece desativada
+## Produção ativa
 
-Em 2026-09-11 não foram encontradas units com os nomes `happily*` ou
-`casamento*`. O checkpoint de segurança mantém esta aplicação dormente.
-Não há um comando de produção validado para este projeto.
+Desde 2026-09-19, a aplicação é atendida por
+`happilyeverafter.service`, executada como `app-casamento`. O código publicado
+fica em `/srv/casamento/current`; estado gravável fica em `/var/lib/casamento`;
+as credenciais ficam no EnvironmentFile root-only `/etc/casamento/production.env`.
+O Puma escuta somente em `127.0.0.1:3000` e o Nginx atende HTTPS.
 
-Não execute `sudo RAILS_ENV=production ...` como alternativa a erros de
-permissão, Bootsnap ou gems. Não use usuários, releases ou EnvironmentFiles
-de IntegrarPlus, homologação ou Pedro. Não reative a aplicação para testar
-esta documentação.
+Não execute Rails como root, nem reutilize usuário, release, banco ou
+EnvironmentFile de outro projeto.
 
-## O que pode ser conferido agora
-
-No checkout administrativo:
+## Operação e verificação
 
 ```bash
-rtk proxy git -C /home/ubuntu/HappilyEverAfter status --short --branch
-rtk proxy systemctl list-unit-files --no-pager 'happily*' 'casamento*'
+sudo systemctl status happilyeverafter.service --no-pager
+sudo systemctl restart happilyeverafter.service
+sudo journalctl -u happilyeverafter.service -n 100 --no-pager
+curl --noproxy '*' -fsS -o /dev/null -w '%{http_code}\n' \
+  https://casamento.pedrodalben.com.br/
 ```
 
-Uma listagem vazia não cria nem inicia serviços. Não invente o nome de uma
-unit, UID ou caminho de credenciais a partir do nome do projeto.
+O serviço deve permanecer `active`, com o listener limitado a `127.0.0.1:3000`:
 
-## Antes de permitir comandos de produção
+```bash
+sudo ss -lntp '( sport = :3000 )'
+```
 
-O gate de reativação precisa aprovar e validar:
+Para uma publicação nova, passe pelo deploy que mantém o release root-owned,
+o bundle no próprio release e os links para `log`, `storage` e `tmp` em
+`/var/lib/casamento`. Valide o bundle e o boot na sandbox do systemd antes de
+trocar o symlink `current` e recarregar o serviço.
 
-1. Dependências corrigidas e bundle disponível para um usuário dedicado sem sudo.
-2. Release publicado em `/srv`, root-owned, com estado gravável separado.
-3. Banco/role próprios e credenciais próprias protegidas.
-4. Unit revisada com User, Group, WorkingDirectory, EnvironmentFiles e isolamento.
-5. Backup, rollback e validação funcional e de segurança da aplicação dormente.
+## Recuperação
 
-Após isso, documente os valores reais neste arquivo e teste primeiro um runner
-que imprime somente UID, Rails.env e Rails.root. O padrão é uma unit temporária
-via `rtk proxy sudo -n systemd-run --uid=<usuario-da-app> ...`, na qual o
-systemd lê os EnvironmentFiles e o Ruby roda como a aplicação, nunca como root.
-
-Se o runtime conservar o prefixo de compilação RVM, reproduza seu bind somente
-leitura junto de ProtectHome. Para comandos pontuais, `DISABLE_BOOTSNAP=1`
-pode evitar o uso de caches de outra identidade; isso não substitui configurar
-o release, gems, usuário e credenciais corretos.
-
-A receita validada em outros projetos está nos respectivos
-`docs/RAILS_VPS_COMMANDS.md`. Seus valores não são intercambiáveis.
-
-## Limite desta documentação
-
-Não foi iniciado Rails, instalado bundle, alterado banco, carregado secret ou
-reativado serviço HappilyEverAfter. A autorização para um deploy IntegrarPlus
-não autoriza reativar este projeto.
-
+Antes da reativação foi criado backup PostgreSQL em
+`/var/backups/casamento-reactivation-20260919`, acessível somente por root.
+Em uma regressão, restaure em manutenção a partir desse backup ou alterne
+`/srv/casamento/current` para um release previamente validado e reinicie a
+unit. Não misture bancos entre aplicações.

@@ -1,0 +1,41 @@
+[Unit]
+Description=Happily Ever After Puma Server
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=app-casamento
+Group=app-casamento
+WorkingDirectory=/srv/casamento/current
+EnvironmentFile=/etc/casamento/production.env
+Environment=HOME=/var/lib/casamento
+Environment=GEM_HOME=/opt/vps-ruby-3.4.5/gems
+Environment=GEM_PATH=/opt/vps-ruby-3.4.5/gems:/opt/vps-ruby-3.4.5/ruby/lib/ruby/gems/3.4.0
+Environment=BUNDLE_GEMFILE=/srv/casamento/current/Gemfile
+Environment=PATH=/opt/vps-ruby-3.4.5/ruby/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/opt/vps-ruby-3.4.5/ruby/bin/ruby -rbundler/setup -e "load Gem.bin_path('puma', 'puma')" -- -C config/puma.rb
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=tmpfs
+BindReadOnlyPaths=/opt/vps-ruby-3.4.5/ruby:/home/ubuntu/.rvm/rubies/ruby-3.4.5
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+ProtectProc=invisible
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/casamento
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
