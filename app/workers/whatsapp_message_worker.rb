@@ -1,11 +1,6 @@
-class WhatsappMessageWorker
-  include Sidekiq::Worker
-
-  sidekiq_options retry: 3, dead: false, queue: "default"
-
-  sidekiq_retry_in do |count|
-    10 * (count + 1) ** 2  # 10s, 40s, 90s
-  end
+class WhatsappMessageWorker < ApplicationJob
+  queue_as :default
+  retry_on StandardError, wait: :polynomially_longer, attempts: 3
 
   def perform(message_id)
     sleep 3 unless Rails.env.test?

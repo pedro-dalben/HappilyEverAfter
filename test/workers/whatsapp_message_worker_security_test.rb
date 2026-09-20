@@ -3,7 +3,7 @@
 # Run with: ruby test/workers/whatsapp_message_worker_security_test.rb
 # No application boot, database connection, queue, or outbound messages.
 require "active_record"
-require "sidekiq"
+require "active_job"
 require "logger"
 require "ostruct"
 
@@ -26,6 +26,7 @@ class WhatsappMessage < ActiveRecord::Base
   end
 end
 
+require_relative "../../app/jobs/application_job"
 require_relative "../../app/workers/whatsapp_message_worker"
 worker = WhatsappMessageWorker.new
 worker.define_singleton_method(:logger) { Logger.new(File::NULL) }

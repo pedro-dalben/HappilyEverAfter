@@ -25,9 +25,7 @@ class WhatsappMessagesController < AdminController
     @message.status = WhatsappMessage::STATUS_PENDING
 
     if @message.save
-      # Usamos perform_in para dar tempo para a transação do banco de dados ser completada
-      # Aumentando para 5 segundos para garantir que a transação seja confirmada
-      WhatsappMessageWorker.perform_in(5.seconds, @message.id)
+      WhatsappMessageWorker.set(wait: 5.seconds).perform_later(@message.id)
       redirect_to whatsapp_messages_path, notice: "Mensagem agendada para envio para #{@message.total_count} famílias."
     else
       @recipients = Family.all

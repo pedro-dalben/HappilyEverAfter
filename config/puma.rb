@@ -4,7 +4,7 @@ environment ENV.fetch("RAILS_ENV") { "production" }
 threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 
-port ENV.fetch("PORT", 3000)
+bind "tcp://127.0.0.1:#{ENV.fetch("PORT", 3000)}"
 
 # Configuração de workers para produção
 workers ENV.fetch("WEB_CONCURRENCY") { 2 }
@@ -18,5 +18,6 @@ on_worker_boot do
 end
 
 plugin :tmp_restart
+plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]

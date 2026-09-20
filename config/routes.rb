@@ -1,5 +1,3 @@
-require "sidekiq/web"
-
 Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: "users/sessions" }, skip: [ :registrations ]
 
@@ -28,10 +26,6 @@ Rails.application.routes.draw do
     get "reports/family_stats", to: "reports#family_stats", as: :family_stats
     get "reports/confirmed_members", to: "reports#confirmed_members", as: :confirmed_members
 
-    # Montagem do Sidekiq dentro do namespace admin
-    authenticate :user, lambda { |u| u.admin? } do
-      mount Sidekiq::Web => "/sidekiq"
-    end
   end
 
   # API endpoints
