@@ -4,9 +4,19 @@ class WhatsappMessage < ApplicationRecord
 
   # Upload de imagem via ActiveStorage
   has_one_attached :image
+  validate :image_constraints
 
   validates :content, presence: true
   validates :families, presence: true
+
+  private
+
+  def image_constraints
+    return unless image.attached?
+
+    errors.add(:image, "must be a PNG, JPEG, or GIF") unless image.blob.content_type.in?(%w[image/png image/jpeg image/gif])
+    errors.add(:image, "must be smaller than 5 MB") if image.blob.byte_size >= 5.megabytes
+  end
 
   # Status global da mensagem (batch)
   # Como o enum nativo não funcionou para você, definiremos manualmente:

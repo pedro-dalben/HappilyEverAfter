@@ -2,8 +2,7 @@ class AdminController < ApplicationController
   before_action :authenticate_user!
   layout "admin"
 
-  # Se quisermos verificar permissões no futuro, podemos descomentar este código
-  # before_action :require_admin
+  before_action :require_admin
 
   private
 
